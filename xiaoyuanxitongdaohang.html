@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="NUIST 入学助手：校内系统导航（统一入口）" />
+  <meta name="theme-color" content="#0B1020" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no,email=no,address=no" />
+
+  <meta property="og:title" content="校内系统导航｜NUIST 入学助手" />
+  <meta property="og:description" content="把常用校内系统放在一个页面：快速找到、复制链接、在浏览器打开。" />
+  <meta property="og:type" content="website" />
+
+  <title>校内系统导航｜NUIST 入学助手</title>
+
+  <style>:root{
+      --bg: #050509;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --hair: rgba(255,255,255,0.12);
+      --brand: rgb(167, 139, 250);
+      --brand2: rgb(96, 165, 250);
+      --ring: rgba(167, 139, 250, 0.55);
+      --shadow: 0 18px 50px rgba(0,0,0,0.55);
+      --r2xl: 22px;
+      --rxl: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    
+
+    .bg-fixed{
+      position: fixed;
+      inset: -20vh -20vw;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(1400px 900px at 18% 0%,
+          rgba(167,139,250,0.13) 0%,
+          rgba(167,139,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        radial-gradient(1400px 900px at 88% 10%,
+          rgba(96,165,250,0.13) 0%,
+          rgba(96,165,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        linear-gradient(180deg, rgba(5,5,9,1) 0%, rgba(5,5,9,1) 100%);
+      transform: translateZ(0);
+      will-change: transform;
+      filter: saturate(1.04);
+    }
+    /* subtle vignette to keep the bottom calm */
+    
+    /* Subtle dither to reduce gradient banding (especially on OLED / iOS WebView) */
+    .bg-fixed::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAA1TklEQVR42lW7aViN7R+2vZdEKql0aaKRNAgpUlSoKJFIGrhRlHlIJPMsZEqiqLt4IkNuSUmIEhVKUiTSoEKlSUoDPR+e7b/e7f2wPq61beu6zt9w7MdxigUHBwvR0dEkJSUxefJk7t27h7GxMSNGjCAuLo7u7m6srKwIDQ1FEATS0tL49esXEhISCILA3bt3aW1tJSsri7CwMFxdXZkzZw4PHjxg4MCB3Llzh+7ubrZu3YogCPz+/Zv4+HgKCgowMjJi4sSJhIeHo6CgQExMDPv27cPJyQk1NTV6enoICAggOzubgIAAHj9+jJ+fH5s3b2bJkiVMmDCBrVu38vbtWwRBwNvbm02bNvH582fy8vL49u0bu3btYsGCBSgpKSEtLU1DQwPl5eXcv3+fEydOIKaoqCikp6dz+vRptLS0OHPmDL9//yY9PR1XV1dmz56Ns7MzkyZNoqysjHnz5jF//nzy8/PR09MjJSWFr1+/0q9fP1auXIm0tDSKiorMnj0bf39/XFxc+PLlC/r6+mzatAlzc3MUFBTIyckhISEBFRUVcnJysLe35+7du6xcuRI9PT127NhBQUEBCgoK1NXVsWzZMnx8fKitrcXU1BQNDQ1MTExwcXFBTU0NHx8f6urqsLa2Ji8vj4aGBhobG8nNzWXIkCEAaGtrc+PGDcaNG8fHjx8ZOHAg4nJycvj5+WFqakpYWBgJCQmMHz+eUaNGsXbtWqZMmYK4uDjz5s1DVlaWtLQ0iouLGTBgAFFRUdjZ2VFXV0dsbCxeXl4sX74cCQkJfv78yebNm9m5cyd6enoMGzYMZWVlrl+/jqOjIwEBAdy9e5empibi4uIwNzfH29ub0NBQEhMTsbKyYtiwYaxcuZIPHz7g4uKCk5MTGzduJDk5GW1tbYKDg/H19aW9vZ3MzEwOHTrE5cuXUVRUpKenh8OHDyMuLs7UqVPJzs6mt7eXDx8+YGtrS2BgINevX0fixIkTrFy5kvb2dsLDw3FyckJJSYmZM2eyf/9+HBwcSE5OZtKkSZSXl1NVVcWBAwfo6enh48ePXLt2jQMHDrBhwwbMzMxIS0ujubmZgIAAenp6kJWV5dixYxgaGjJx4kQ6Ojro6Ohg3759FBcX09vby+HDh2lpaSEmJobFixezfft2uru7Wb58OTIyMqxcuZLVq1cjLS2NkpISSkpKqKqq4urqyogRI7C2tsbb25uPHz9y6dIl5OXl0dfX5/nz57x+/Ro5OTmysrLYu3cvr169Qltbm46ODhQVFRHT1tYWvLy8uH37NpMmTQKgsrISDQ0N6urqRD8QExODIAhERkbS0tLCsmXLCA4OJiMjAzU1NVxcXAgODsbExISjR4+yfPlybG1tcXd35/Pnz/Tp0wdVVVU0NDSYPn06c+bM4b///uP58+c4OztjZWXFz58/uXPnDkuXLuX+/fuUl5ejrKxMQUGBqNdERUWxZ88euru7uXPnDg8fPuTo0aPk5OSQl5dHcXExoaGheHl5oaury9q1a1m5ciWbNm1CVlaWvXv3UlZWxtGjRxk3bhxs27ZNqK2tFe7duyc0NzcLBgYGwpgxY4Tv378L69evF8TExIRPnz4J2tragr6+vtDW1iYsX75cMDAwEIqLi4V79+4JlpaWgrm5uRAbGyuUl5cLoaGhgq2trZCUlCRYW1sLJSUlwpcvXwRlZWUhKipKmDp1qtDR0SE4OzsLZmZmwurVq4XTp08LWVlZQkBAgNDV1SUMHDhQKC4uFgYMGCAsXLhQWLVqlbB+/XohICBAkJKSEvr27Svk5+cLjo6OwrBhw4SgoCDh/fv3wubNm4WcnBxh7Nixgo+PjyAIgqCgoCB8//5dqKmpESoqKoTPnz8Lr1+/FhwcHASxxMREoaOjgxs3blBXV4eNjQ1Hjhzhzp07tLe306dPH7S0tBgzZgyxsbF0dHQwYcIEfv36xaJFi0THqbW1latXrzJ16lSUlZX5+/cvkpKSDB48mHPnzjF69GgyMjI4e/YsampqLFu2DA0NDcaMGcN///3H0KFDyc/PZ8uWLfz777+cOXMGNzc3WltbmThxIm/evEFcXJwrV64wefJkjhw5QmBgIKNGjSInJwcVFRWePHmCn58fJSUl5OfnM3r0aK5du8bgwYPZs2cP8+fPx8XFBVtbW8TFxamrq0NMSUlJePXqFYsWLWLOnDkcOXKEVatW0dXVRVdXF0VFRWhqaiIpKYmCggI+Pj5oaWkRFhbG79+/cXR0xMDAgIMHD7J79258fX2ZNWsWsrKyeHp6snr1apycnPjz5w9+fn4cPXoUOTk5tm3bxqtXr8jNzSUqKop+/fpRW1vL2rVrOXfuHPHx8Zw8eZKbN2/i7OxMVVUVGhoa6Onp0dbWxvv37ykvL+fAgQMcOXKEpUuX0tbWxvLly5GXl8fHx4eysjJ8fHxwdXWlt7eX/Px8/v79S01NDeXl5fz48QOx7OxswdraGkVFRbZt20Z2djYhISGEh4czYsQInj17xtevX1m3bh1FRUVERUVhamqKm5sb7969o7GxkcrKSt6+fcu3b9+YNGkSFRUV/Pr1Cz8/P9TU1EhLS0NNTQ0nJyeuXr2KhYUFOjo67Nq1Cy0tLUaNGkVqairTp0+nrKyM8ePHM378eHR1dRk+fDhHjhzBxsYGHx8fYmJiePToEUOGDOHy5cuUl5ezYcMG3r17h5+fH2vWrCE6Opq6ujqmT59ORUUFubm5NDQ0sH37diQlJZGSksLGxoa3b98itnfvXqGoqIgXL15QXl5OUlISjY2NfPjwAW9vb/bv34+9vT1WVlbo6ekxZcoUjIyMWLduHe7u7uzevZvDhw+jrKxMUFAQnz9/ZvLkyfT29qKtrU1CQgL79+/n9evX5Ofns23bNjZu3MjUqVOxsbHh0aNHWFpacuPGDXp7e+ns7ERBQYFx48aho6PD6dOnOXToEHl5edjY2PDt2zf69u3LkCFDGD9+PPv37+fp06csW7aMvLw8oqKiqK+vp6WlhV+/frF7927i4uIIDw9n4sSJKCgo0NXVhaamJmpqaohbWlpy+PBhKisrERMTY9CgQRQVFXH+/HkKCgpob28nPz+f8vJylixZwufPn9m/fz/Dhw8X7QpDhgzhypUrnD9/Hm1tbVJSUggMDCQzM5Pe3l5+/vyJsbExgYGBopGbkpJCVVUVqamplJeXc+3aNVavXs3WrVvZs2cP8fHxpKWlYWxsTHZ2Nn/+/OHmzZsoKCggISFBZGQk69atw9XVlUOHDjF27Fji4uIYOnQoVVVVzJs3DwMDA/r3709FRQVDhgxh7NixbN++HSkpKU6dOsWtW7cQCwkJESIiIlizZg0jRowgIyODy5cvY2xsTEVFBS4uLly/fp3Vq1ezYMECDhw4wMCBA3n16hWTJk3CxcUFFxcXxMXFefXqFWpqalRVVTFo0CD09fVpb2+nrq6OmTNnYmxszPv377l37x5mZmZs2LCB8+fPIyMjw7Fjx4iKiiIlJQVlZWXq6+uxtLRkzpw5WFtbExISQlRUFNbW1piYmNDU1MT79+959+4doaGhuLm5MWzYMMzMzNi0aROOjo4MGzYMHx8fXFxckJSUJD4+noMHD9Lb24uenh7Tp09HQldXl8GDB1NRUcGAAQP48OEDcXFxlJeX8+jRIxwdHWlqakJDQwM5OTnGjx9PREQEEyZMIDw8nIaGBmpqakhISMDPz4/AwECSk5NFK/X8+fMJCwsjICCA06dPc/z4ccLDw5k7dy62trZkZ2fT2dlJVVUV5eXlODk5YWVlRWlpKXPmzOHs2bNER0czdOhQXF1dsbCwwMHBAQ0NDc6cOcO5c+dYsGABXV1dmJubM2fOHEaOHEmfPn1QUlKivr6eI0eOoKqqyuDBgzE3N+fgwYMYGBgQHR1NHwMDA2kAOTk5Hjx4wLt378jJyaGlpYXVq1ezfv16srKy2LZtG15eXqirq5OWloaNjQ0rV66kra0NOTk5tm7diqamJm5uboSEhJCZmcmSJUt49+4dUVFRVFVVYWVlRUJCAvX19UybNg1/f3/a2to4c+YMa9euJSMjg7t372JmZoa7uzuzZ89m/PjxhIeHA9Dd3U1ubi5ZWVkcPnyYQ4cOsW7dOo4ePYqRkRGhoaG8efOGiIgI7Ozs6OnpYc2aNSQlJZGYmIiZmRkuLi4YGRmRkpLCnDlzEL916xY7d+7Ezs6OzZs3Y2VlRVtbGx0dHRw+fJiCggLmzp2LgYEBx48fx9bWlujoaDIyMigrK6OhoYGcnBwkJSV5+vQpxsbGxMbGMmHCBNLS0nB2dqa2tpbGxkbS0tLw8fFh06ZNREZGEh4ezrdv3zh9+jQpKSk0NzcDMHXqVPbu3cv169c5e/YswcHBJCcnIyMjg4yMDM+fP2fYsGG8efOGmzdvIikpKZoWvb291NTU0NzcTFdXFx4eHixevJjc3FwuXLjAgAEDsLCwIDc3l7Vr1yJWXl4ulJWVoa+vj5WVFVevXuXq1asIgsDAgQNJS0sjMjISV1dXPn78SHJyMseOHUNCQgJHR0fev39Pe3s7+/bt48aNG/z584fDhw+zbds2AgMDaW9v57///mPMmDG8f/+ekpISMjIyUFZWFknjuXPnIisri7u7OyYmJlhZWbFu3Tp8fHzw9fVlzZo1DB48mMmTJ7Nnzx727t3LjBkzRA1u5MiRXLt2DTExMf799186Ozu5du0aX7584cCBAxgZGaGiokJISAjl5eWIiYmxZcsWhg8fjnhmZiampqacP3+eo0ePoq2tjZGRES0tLRw8eJAZM2YgKSnJhQsXGDx4MMOGDePw4cMoKirS3NyMtrY2tra2GBkZYWhoSGBgIO/fv0dWVhZBEHj9+jURERFUVVVx7NgxAgICmDt3Lt7e3uzbt4+enh4OHjxIXV0dpqam2NraMm7cOFRUVDh69CgmJiZYWlqyd+9e7Ozs+PXrF9OnT8fNzY3S0lKys7PR1NQkMjKSNWvW0K9fPwICAiguLmbatGkEBQVRX1/PggULuHTpEs3NzTQ3N/P+/XsqKysRHzNmDFevXmXmzJkEBQUhIyPDwYMHaWhoEL1xW1tbTE1Nsba2pm/fvixatAgpKSlqamr477//iIuLY9OmTdy8eZPa2lo8PT1JSUkhKiqKXbt2cePGDYqKisjKyqJfv35oaGjg4eEhUmx9+vRh6tSpODg4cPv2bSZMmEBxcTHfvn3Dw8ODxMREFi1axMSJE4mMjOTAgQMUFhYyfPhwuru7SU9PR09Pj6KiIgwNDdHX1+f169d4eHjg6OhIZGQkWVlZfP78mZMnT+Lk5MShQ4c4fvw4EhoaGqSlpdG/f3+WLVtGT08PgYGBREVFceDAAdatW0dXVxcDBgxg0KBBrF27lhkzZlBUVERDQwPy8vKoqKgQHh7OixcvSE5OZvHixYwaNYpNmzZx5swZVq9ejbq6Otu3b+fNmzf8/fuXoUOH4u7uzrZt23j06BF79uzhzJkzbNiwAS0tLT59+sTgwYPR1dXl4cOH/Pnzh6ioKJycnFi+fDkGBgYEBwcTERGBr68vKSkpTJs2DUEQCAoKQltbmy9fvnDq1CmSkpIACAoKori4mJ8/fzJw4EDmzZuHxNq1a/H09GTEiBGkpaUxe/Zs1NTUSExMZNKkSfj5+fH48WMePnxIa2srT548Ydq0aRw8eJDU1FRGjhzJrl27uHr1KgsXLsTDw4Ompibq6upEKKu6uholJSWGDx9OUlISurq65OXl4e3tzY4dOzh69ChfvnzBzs6OwsJCent7kZOTw8HBgSFDhvDvv//S1tZGe3s7/v7+tLS0UF1djaamJiNGjODSpUvMnj1bJK03bdrEy5cvGTduHF1dXbx48YLc3FwaGxuRk5NDSUmJO3fuUF5eTh9lZWXpEydOcO7cOcTExCguLubGjRvcvHmTJ0+eICYmRkJCAgMHDsTR0REbGxtmz55NcnIyy5YtIzo6WlT3e/bsoX///oSGhuLj40NycjJ37twhLS2NYcOGcfnyZZycnNDR0UFFRYVVq1YREhLCuHHjCA0NRUxMjDFjxtDd3Y2uri6+vr6sX7+eq1evEh0dTVNTEwcOHMDQ0BBDQ0NOnTrFs2fPePToERkZGTx//hxbW1tOnTrFvHnzmDJlCvr6+mhrazNhwgQuXLhAXl4etra2WFlZ8fv3b8TOnj0rbN26leDgYJYuXUp6ejrOzs6MGjUKLS0t9PX1MTY2xsrKilmzZpGdnc2kSZN48OAB4uLiuLu709vbi4WFBcOGDeP58+eMHj2aqqoq3rx5g6KiIqWlpXR3d7N27VoEQUBRUREFBQWuXbtGTEwMhYWFfPz4kSFDhpCcnIyLiwsRERE8ePAAbW1tKioqRLDF0NCQ5cuXo6ioiLOzM7t27UJOTo7nz5/T0NDAgwcPePv2LX5+fvTr1w9jY2P+/fdfDh48iIyMDLGxsaiqqjJp0iRCQkIQ+/79u6Curk5QUBD5+fnIyclhYGBAWVkZsrKydHR0sGnTJpydnSkoKMDc3BwdHR3u379Pa2sr//zzD+3t7QQFBeHl5cXPnz8pKytj9uzZxMTEEBcXx5kzZzA0NKSgoABPT0/mz5/P58+fUVNTIyIigjt37uDv78/ChQsZPXo0P3/+ZNCgQZSWlmJhYUFeXh729vb0798fKSkprl27Rl5eHkZGRuTl5WFpaUlWVhZr167l5s2bDB06lB8/fpCYmMjSpUuZOHEigiBga2tLUFAQOTk56OnpsWHDBiTWrFnDlClTMDQ05PDhwzg7OyMIAkOHDkVHR4erV6/S3t7OkydPWLRoEenp6SQlJSEnJ8eNGzf4+vUr379/Z+LEiSIg+j/EvX37dhISErCysiIyMpK/f//y+vVrxo4dy4oVK6irq2PdunVcvHiR6OhoqqurCQ8PJyYmBh0dHT5+/CgqEX19fVRVVfHx8SExMZGwsDAUFRW5dOkSlZWV3Lhxg+rqalHtNzQ0sHr1aoKDg1m5ciVDhgzB1dWVDRs2UFZWxsaNG/nx4wcS/5Ok+/bto0+fPvTt25fNmzezaNEidu7cyevXr1FXV2f69Ok8efKE6upqDA0N0dbWRl5entLSUkxMTBg5ciTbt2/HxMSEixcvcvbsWerq6lBVVaVfv37Y29tz9uxZ1q9fj5+fHykpKTg4OKCrq0tAQAAREREsWrSIsWPHcu7cOWbOnElpaalowZGUlGTBggXs3r0bKSkpkpKS6Onpobe3lwkTJrBp0yYGDBjA5MmTOXHiBI8fP+b79++iKTNjxgzmz59Pnz590NTUJCMj4/8pS29vbwwNDUlPT2fv3r1UV1dz9epVzp07x9OnT1FTU6OoqAh9fX2cnJyQlpbm5cuXGBkZoaurK/pzkydP5sKFC7S1tdHU1MTPnz/x8PAgPT2d0NBQdHR0uH37Nl5eXjQ3N9Pa2kpHRwfOzs78888/mJiYcPr0aZFZoqmpyapVqwgNDaWpqQkVFRUCAgK4cuUKdXV1fP36lQ0bNuDu7i6CHJMmTUJMTIyTJ09y5coVvL29efv2LcnJyYwZM4ZHjx7x48cPlJWV8ff3559//kEsJydH+P79O5s2baKoqAh7e3uMjIx4/vw5TU1NDBo0iJCQEIyNjfH29sbNzQ0zMzNycnL48uULf/78YdasWcTFxbFz507q6upYsGABx48fp729nb9//2Jubs7kyZOJiYlBTU2N0aNHk5KSQkFBAVVVVSxfvpyvX78SHx9PSUkJkydPJi4uDjk5Ob59+0ZkZCQnTpwgMjISgMmTJ5ORkUFrayvHjh3jzp07+Pj4EBERQX19PV1dXUycOJEzZ87w6NEjxMTEGD58ONu3bxf1DU1NTU6ePInYoEGDhCtXrvDgwQO8vb1ZunQpr1694vjx44SFhVFVVcXHjx8ZO3YsS5Ys4dOnT0hJSeHp6cnGjRsxMDBAQ0ODN2/e4O7uzt27d9m6dSv37t0jKCgIcXFxGhsbeffuHUuXLmXkyJFs2rQJZWVloqOjuX//Ps7OziQmJvLx40csLS159uwZ8vLyTJs2jba2NpKSkqiursbBwYGmpiZycnKwtLRk1apVDB8+HAUFBTZs2MA///zD6dOnWb58ORMnTuT379+oq6szf/58JkyYQG9vLzt27ODHjx/U1dXh4uKC2IABA4Tk5GQuXbqErq4uSUlJzJ07lxcvXvDr1y/mz5/P2bNnuXTpEpqamrx584atW7eyb98+jIyMRGPw0KFDpKSkcPLkSXR0dDAyMuLatWv07duXp0+fIi4uTk5ODlVVVXR3d3Pz5k3Wrl2Lm5sbysrKtLW1YWZmhpWVFfn5+aipqeHm5kZqaio1NTX09vYSERHB8+fP2bZtG3379qW3t5c/f/4QFhbG7t27OXHiBOLi4pw6dYpLly4xfvx4Ghsb6dOnD//++y8yMjLcu3ePqKgozM3N0dTURLytrY1fv37h4ODAjh07mD59OuvXr0dSUpJbt25hZ2dHcXEx8fHxmJmZ8eXLFwDevXvHzZs38fX1ZcOGDdy4cYP//vsPeXl5Vq9ezc6dO/n27Rv9+vVDRUUFExMThg8fjru7Ozo6OuTm5mJtbc379+/Jy8vj5s2bODg4cOfOHbS0tPD09KS4uJgNGzYwZ84cdHR0ePnyJTNmzMDAwIAXL16QkJBAWloaXV1dxMfHo6GhQUlJCfHx8Vy+fJnKykrc3d0ZPHgwRkZG1NXV0draSm5uLnFxcdy+fZs+OTk50itWrKCxsZHGxkYuX75MU1MTLS0tGBsb8/TpU2bPnk1oaChqamr8/PmTqqoq0eZoZGREZWUlHR0dqKurc/v2bUJCQmhvb2fnzp00NDRw7Ngxjh8/zq1bt9i1axdjxoxBX1+fxMREkpOT0dTUxNLSEnV1dWprawkODsbHx4fZs2fj4uJCUFAQbm5uGBgY0NraytmzZ4mJiWHFihUMGTKEnp4e5OTk+Pr1Kz4+Pjx8+BAAX19fNDQ0RIDk06dP9PT0cOfOHcTExJCVlUWivLyc9vZ2kem5a9cuxMTE8PLy4tixYyKDQkZGhoSEBN6+fYupqSkDBgzAz8+PiIgInJ2dycnJAcDIyIiLFy/S0tKCsrIy/fv3x9ramj179hAbG0t6ejr6+vqMGzeOly9f4urqioSEBA4ODgwdOpTMzExsbW2Rk5Pjw4cPvHz5kurqaqSkpDh37hyenp7Y29sjJSXF0qVLGTduHMePHyc3N1fkEcydO5dbt25x6dIlpKSkmDJlCitXrsTb25v79++jqKjImDFj0NTURKKkpIR//vmH2tpa7t+/z61bt9DU1MTGxobs7GxkZGTQ1dVl6tSp9O/fn/nz57NmzRp+/PiBnp4eL1++pKSkhEWLFjF69GhRMxowYAD9+vWjo6MDfX19Dhw4wP79+9mzZw9FRUWoqKiQlpaGnp4eUlJSbNq0icePHyMnJ4ekpCQTJ04kMTGRffv2UVpaiqOjIx0dHdy/f5+WlhYaGhpISUmhqamJ6upqXr9+jaysLPb29owZMwYvLy8UFRWxsrLi1KlTNDc3M2fOHLKzs3FycqK0tBRfX1/6ODo6Si9cuJCUlBTc3d1FTtD/HKD169eTl5fHp0+fEBMTQ1NTk7y8PDIzM/nx4wffvn3j9+/fzJ49G1tbWwRBYMqUKVy7do38/HxqampYtmwZZmZmNDY24ubmRkZGBjo6Oty5cwdJSUkWL15MSUkJbW1tBAUFMXjwYLq6unj69CnV1dUcPHgQIyMjHB0d2bhxIxs3bqSyshI/Pz9u3LjBjx8/6Nu3LzNnzqS9vV303YKCAp48eUJERATTpk3DycmJBQsWcPr0aYYPH86TJ08QDwsLQ0VFhXXr1lFXV8eNGzdITU2ltrYWbW1tbt26RWZmJvHx8RQVFSEpKUldXR2/fv1i7dq1+Pv7k5ubi4mJCYsWLcLV1ZXq6mqWLFmCr68vRkZGHDlyhOzsbCwsLBAEgczMTDZu3MjkyZM5f/48Q4YMYenSpSxZsoQzZ86grq7O+/fvMTU1RUpKCnl5eZKSkvD39+fNmzckJCTw+PFjduzYwaNHj+js7BQ1XCMjIxobGyksLKSwsBBVVVU8PDyQkZEhIiKCwMBAtmzZgrGxMQkJCYjp6+sLL1++ZNmyZYwdO5bfv3+TkJDAz58/qauro729ndTUVPbu3YutrS2HDx/m2rVr5OTkkJqaSl5eHvr6+gQFBWFvb8/Pnz8JCgrCycmJ2NhYQkJCAIiMjKSkpASAy5cv09XVxYoVK0hKSsLe3p7p06czfPhwWlpaSE1NpampSTQGW1tbuXHjBtLS0ty6dYuQkBCWLVtGaWkpTk5O3Lhxg6qqKvr27UtaWhrfv3/n9u3bbNy4kb9//3L79m2UlJQwMTFBRUUFRUVFtm7dSlpaGmIrVqwQ2tvb+T//5/9QX1/PmjVrmDdvHitWrMDf35/Kykq0tbUZP348w4cP5+zZs9y5c4dPnz6hqKjIkSNHsLa2RkxMDFNTU5SVlfHy8uLt27ds3boVS0tLvL29qaysJCcnB09PT+rq6mhsbOTJkydMnToVZ2dnioqK+PXrF76+vly6dEnk7NTU1HDx4kUGDhyImZkZNTU1ok9aWhqWlpZUV1cjCALBwcG4ubnh5eXF2rVr+fLlCw0NDfz3338EBwdTWFjI79+/2bdvH/n5+bx9+xaJzs5Opk+fzoABA5gzZw7x8fFYW1uLOPrMmTN58uQJp06dYuLEiairq+Pr68uTJ0/YsWMHW7ZsISIiAiUlJXbu3MnOnTuZNWsWYmJitLa20tbWhqurK62trcyaNQsFBQUEQSAxMZEFCxaQlJTEqFGjGDFiBB8+fGDWrFmYmppy/fp1vLy8iI6O5tChQ9jb2zN16lQqKys5fvw469evR0pKijdv3jBmzBh0dHT48+cPAwcOxMLCgunTpzN79mxKS0sxMzPjwYMHREVFUVJSQmtrK6dOneLixYuIRURECLGxscydO5fVq1ejpaVFRkYGt2/fZu7cuejq6mJra4uBgQErVqxAEARUVFTYsmULPT097N27F0dHR3bs2IG0tDTl5eWEhoaycOFC8vLyUFNTQ1ZWlmHDhtGvXz+2bNmCvb09zs7OfP/+HRMTEzo7O9HV1WXWrFmi+W9vb8/AgQO5d+8eGzZswNLSkpUrV/L06VMGDBhAfX09CxcuJD4+nnfv3rFkyRLWrVtHQUEB9fX1IrF279499PX1qa+vp6amhsLCQuzt7QkMDCQxMZE+/v7+0tXV1ZiZmZGbm0t2djbm5uYiS6mlpQUHBwf69etHbGwsy5cvZ/LkyaSmpqKiosLevXsBRMcrMTGRK1euMHDgQLKzs4mKimLo0KFoaWkhLy+Pt7c3WlpaqKqqcu7cOSQlJdHT02PUqFHY29vj5OTEzZs3yczMZNSoUWhqavLr1y/Mzc159OgRaWlpzJ8/n/v37+Pu7s6qVat4/fo1RkZGVFVVsWfPHuLi4sjNzUVOTo4zZ85gZmbGqlWrRL5C//79Wbx4MQ4ODojFxMQIT548YeHChTQ1NdHT04OWlhZ5eXnMnz+fkpIStm3bxoYNGzA2Nmb69Om8efMGAwMDFi9ejKmpKbKysmzevJmwsDCGDBlCdHQ0Z8+exc7ODmNjY2JiYsjIyCA0NJTr16+jra3NmzdvCAwMxMHBARkZGSQkJFBUVOTKlStcvXqVzs5OoqOj+fLlC62trZw+fRorKytmzJjB2LFjUVFR4fz580hLS9Pc3IyhoSG+vr5YW1szatQoZs2aRWVlJVu3biUmJoZbt27R1dWFrq6uaLkaOXIk4pGRkeTk5LB+/XpUVFTQ0NBATU2NjRs3kpqaiiAIdHR0UFlZibm5OaWlpURHRxMfH09+fj5nz54lNTUVGRkZVqxYwZYtW9i+fTsKCgqsWLGCMWPGYGdnh7q6OmfOnGHz5s0EBweTnp7O9evXiYyMxNHRkUGDBnH58mUSEhLo378/ly9fpqSkBDs7O75//05ERAR9+vShra0NDQ0NHBwcMDMz49KlS0hKSuLv709qaio+Pj58/vyZmpoaXF1dUVJSory8HFtbW3x9famvr2fv3r18/foVJSUlJH7//o2qqipRUVE8ffoUe3t7HBwcmDt3Llu2bCE9PZ2XL19iamrK8ePH+fz5M01NTUhISLBhwwYOHjyIvb09FhYW1NbW4ufnx6JFi9izZw8eHh58/fqVI0eO8PPnT3bu3MmfP3/o6OigoKCAhw8foqury5MnT7C2tiY4OFjEApydnWlvbycqKorv379TW1vL5s2bkZaWFgFbFRUV+vbty4cPHxg2bBg2NjbExcUxZcoUzMzMyM7OprW1lZKSEvbt24ejoyNv3ryhqamJu3fvcvHiRcQTExPZunUrysrKvH79mvT0dD59+oS4uDi3b9+moqJCJIKWLFlCSEgII0aMICsrCwUFBZYvX05sbCxPnjzB09OTZcuWsWPHDo4fP05ZWRmurq7U19ejoaEhCkF2d3dja2uLi4sL+/fvJysri8jISHp7e7G0tERGRoaqqioCAgIIDg6mtLQUZWVlhgwZQn19PR0dHXz69AkdHR2uX7/OkCFDqKmpwdPTEwsLC2bOnMm9e/coKCigsrISaWlp3rx5Q2ZmJj09PZiamvL582fCwsIQb25uJiUlheHDh3P79m1evHjB8ePHsbe3JycnhwMHDhAREUFZWRl9+vShp6cHfX19/v79S3Z2Nu7u7qiqqrJixQqOHTvG2LFj6ezsRF1dnYMHD2JnZ0dtbS1FRUWEh4fz48cPAgMDaWxsxM7Oju3bt6Onp8e+ffsQFxfn9+/f2NnZsXfvXoyMjBg8eDCbN28mJSWF8vJy5s2bh76+vihae/78eV69eoW9vT29vb08ffqUe/fuYWNjQ0VFBTNnziQ9PZ0VK1agoKBAUFAQZmZmxMXFsW7dOvq0t7dLd3V1sWTJErKyshgzZgzt7e28e/eOgIAAtm/fjr+/P3V1dSQkJHD9+nXmzp3Lz58/2bdvHwMGDKCqqorw8HA2bdokepDh4eEsX76c9evX8+rVK5SUlJCXlyc8PJyenh7ExcWJjIzEw8ODa9eu8T8o8z8s978TtnHjRnbs2IGWlpYoPTp37lz8/PxoaWkhICCAd+/esWrVKkxMTHjx4gUWFhbY2tqyevVqOjs7sbS0JC0tjaamJjo6OtDV1WXUqFG0tbUhbmBgQFNTE76+vpw/f55p06aRm5uLhIQEfn5+2Nvb8+3bN+Lj46mursbNzY2dO3cyf/58srOzRU++q6uL/v37k5qayuvXr7G0tOTKlSvk5OQwfvx4Xr16JaLEt27dIi8vT5Qd3Llzp0hW37t3j/b2dgoLC0WsIDk5mRs3bpCfn094eDgWFha4ublRU1ODIAgsWbIEExMTli9fjqSkJM7OzmhqauLt7U1HRwdZWVlkZ2eTkZGBnp4ezs7OAGzbtg2xzMxMwcnJiX79+iEmJkZoaCjLli0jMjISBwcHPnz4wMmTJ0lPTycoKIhBgwbx6dMnYmJicHNzE+V3Tp8+TXNzM2lpaeTm5lJVVcWUKVNE1Gf69OksXbqUf//9l6amJoYNG0ZjYyM1NTXcunWLjIwMNDQ0+PHjB6WlpVy8eJE/f/7Qv39/Vq1aRXt7O3/+/OHNmzeoqamRk5ODg4ODiDQJggCAh4cHWlpa1NfXIykpybp16xg6dCiHDh0iKysLdXV1rKysyMjI4OnTp4hZWFgIqqqq7Nq1CxcXF6Slpamrq2PKlCkinBUbG8uLFy/IzMykuroad3d3EhMTWblyJU5OTlhYWJCenk5GRgb79+8nOjqaqKgofv/+zZ07d9DQ0EBLS4vRo0ezZs0aLCws6NOnD/7+/iK1pqysTGNjI1OnTqWxsZHU1FRevHhBSUmJaBv9+vUr3d3doj4wdOhQWlpaOH78OCtXrkRTU5MZM2aI0iMhISFoamoycuRI9uzZw927dxk/fjw/fvygra2N79+/Ix4VFcXIkSNFYSMPDw+6u7uxtrZm/PjxJCUlUVZWxvLly/H29mbJkiVoamqKJOrv37/Zs2cPw4cP5+jRo8yaNQttbW38/PxwcnLCy8uLFy9eUFxcjI2NDXPmzOH27dvk5eWxd+9eKisr+fXrFzt37sTJyQlTU1OePXtGZ2cnycnJ9O/fn4SEBKSlpdHX16eurg5FRUUqKirw9/dHEARKSkrQ0dFhyJAhDBw4EG1tbZycnCgsLOTu3bts2bKFuXPnMnbsWFxcXJg8eTJ9+/Zl7ty59CkoKJBWUlLi5s2bpKWl8fLlS2RkZGhpaaGsrAwbGxtRbEZcXBxPT086Ozt59eoVBw4c4ObNm0yZMoWIiAg6OzuRkJDAy8uLXbt28fz5c54+fYqNjQ3fv3/HxsYGFRUVVFVVqa2t5cGDB3h4eDB8+HDMzMzo7e1l1KhRyMvLk5mZSWBgICdOnEBLS4vk5GQSEhKIiooiNDSUuLg47ty5w6NHj0hOTubhw4cIgsCjR49obGxkyZIl3Lt3j6SkJKSlpbl+/TpHjx6ls7OTadOmcffuXXbv3o2YpqamMGPGDOLj4+nu7mbdunW8e/eOpqYmysrKaGtrY9++fZSVlTFp0iRMTU3ZvHkz/v7+WFhYkJmZSV1dHYGBgVRXV3P27FmSk5NRVVXFxsZG1J0TEhIYPXo0t27dIjs7m/fv32Nubk5YWBhubm6IiYkxcOBA/vz5w/79++nfvz/Nzc3Y29tTXFyMgoICq1atYuXKlVRXVxMfH8/UqVP5+fMnr169wtfXl7dv3zJo0CCRLXfhwgUUFRVxcHDg9OnTODo6oqamJupp586dg/nz5wsdHR3CgAEDhICAAKG6uloYPHiwEBUVJejq6goGBgbCli1bhJSUFKG0tFQ4ePCgMG3aNKG0tFR4/vy5sGbNGkFcXFxobm4W8vPzBS0tLWH//v3Co0ePBBMTE2HlypVCv379hAcPHgh9+vQRJk2aJISHhwsaGhrC9+/fhefPnwu1tbXCr1+/BAcHB2Ht2rWCtbW1ICYmJsTHx4ti+QUFBcK3b9+EyMhI4devX8KUKVMEKSkpobm5WUhKShJ8fX0FMTExYc+ePcKHDx8EHx8fQUxMTEhPTxfa29sFCQkJYeTIkUL//v2FgIAAYeLEiYKsrKwgERwcjJOTExUVFXz9+pXExESKi4sxNTVl165dLFmyhIULF2JsbIwgCDQ3N3PlyhVsbW2JiYlBW1uboKAgLl++jI+PD/Ly8jg4OGBnZ4eRkREnTpygsLCQ1tZW7O3tcXd3x8LCgk+fPtHc3MydO3cwNDREVlaWX79+YWJiwrx586itrcXX15eLFy8yffp0xowZw+LFi+nq6kJcXJwXL16QlZWFjo4Oly5dYvPmzZw+fZp//vkHPT09Dhw4QENDA25ubhgaGvL06VMWLFiAl5cXGzduxNTUlKFDhyJRUFDAmTNnSExMZPLkyURGRrJlyxYSEhLo6uoiOTkZWVlZurq6eP/+PTdv3mTVqlW4u7uLaK66ujqmpqaUl5dTVFTEyZMnGT9+PE+fPmXx4sU0NDSgrq6OoaEha9eupbm5GTMzMzw9PUlNTRURYUBUv93d3SLM9ufPHywtLenXrx+FhYV0dXUxdOhQ7t69i6enJ/r6+ri6uuLu7s7Hjx+5cuWKaBKEh4ezdu1awsLCWLduHTY2Npw8eZKioiI8PDyQOHbsGNu3b2fVqlXIy8tjbm7OsWPHRDlfaWlpLly4QN++fYmNjeXZs2fo6OiQlJSEi4uLqOZramrYvXs3jo6OLFu2TPR2CwsLefbsGS9evCAiIoJHjx5hZGTElClT+Pv3L1VVVeTm5lJfXy8CLDU1NXz+/JkRI0awcOFCJkyYgLy8PH5+fqLgY1hYGJ2dncjKymJkZMTDhw95/Pgx48ePR1ZWFgMDA2RkZAgODqa7u5vdu3dTU1PD4sWLaWtrY/369XR3dyM2cuRIwdTUFElJSTQ1NZGRkWHUqFGYm5ujqqrK+PHj8ff3Z9q0aaioqBAXF0dKSgqenp68f/+e169fExoaiqamJl++fMHDwwNtbW28vLwYN24ckZGRXL58mcLCQjQ0NPDy8uLVq1f8/v2bY8eOMXDgQPbu3Yu0tDSdnZ0kJSWRlZVFWloacnJyGBkZMW3aNMzNzZGVlaWsrIzi4mImTJhAaWkpbW1t/Pnzh69fv+Ll5UVGRgZfv34lICCAixcvMnr0aKSkpKioqCA8PJzS0lJRxNfExATxsWPHUl5ezu/fv/n8+TMaGhq4urrS3NzMjx8/aGxsxMTEhNDQUA4dOsSkSZPIz88nOjqakpISVFRUqK6uprq6mqNHjzJ48GCkpaWpqqoiPT0dLS0tNmzYgIyMDFJSUsTFxeHg4EBYWBhPnjxBXV0dOzs7GhoaWLVqFbW1tTx+/JgvX76IptDs2bNpa2tDSkoKLy8vRowYQXFxMZ2dnTx48IDc3FyOHTtGRUUFQUFBxMbGkpSUxMePH/n48SN3795l6dKlPHv2jIKCAjIzMxk5ciQaGhpIHDx4EBcXF548efL/7GIxMSoqKpCSkiIiIkLE/RUUFPjx4wcWFha4u7sTExPDyZMnqa2tRU9Pj+/fv+Pm5kZMTAzTpk0jISEBf39/dHV1OXPmDMbGxgwbNgwdHR10dHQoLy9n9uzZaGpq8vnzZ/r27YuDgwMtLS2oqKjw7ds3RowYgZ6eHnl5eTQ3NzNixAjk5eUZMWIEVVVVLF68mJiYGO7du8eNGzfQ0tLixIkTnDhxAhsbGzZv3iy6TOHh4QHAjBkzuH37tsjEEXv9+rWwdOlSGhoa6Nu3L3JycpSWlrJ9+3YiIiIYNGgQra2tyMvLk5OTw9SpU3n58iWzZ88mPz+ftrY2HB0dRTwvJCSEwMBALCwsUFZWJioqiufPn2NtbY2xsTFlZWUYGBjw5csXZs2axfr161FXV2f//v2i9XvNmjVs375dZMLm5OTg7OzMrVu3mDZtGpcuXeLBgweMGzcOPz8/srKyKCwsFGUP7ezsWLVqFYaGhkRGRnL06FHq6+uZPn06y5YtY/DgwfT09PDnzx/EDQ0NqampwcjICElJSdzc3Pj9+zdaWlo4OjoSHR1NXFwcFRUVfP78mdOnT7Nt2za8vb1RUlKisrKSy5cvM3/+fAD27dvHjBkzWLNmjeiyk7S0NEOGDGH//v3U1NQQFBQkyvS/fPny/4exe3p60NPT4/bt21y8eJFhw4bx48cPPD092b9/P58/f+bs2bMkJSXx+vVrKioqaGlp4ezZswwePJiDBw+SnJzM9+/fef/+PUZGRkRGRjJq1ChGjRpFfX09EhISuLq6UlBQQB8lJSXpLVu28OHDB4qKihAEAT8/PxoaGlBWVsbHx0ekpg4ePMjr16/58+cPdnZ2DBgwAGdnZ7Zv386ECRO4dOkSjY2NjB49WgRLnz9/Tl1dHTk5OVhYWNDa2oqbmxsuLi7IysoSEhLCP//8Q2Zmpmj/P3fuHNu3bycmJoba2lrKy8vx9/dHSkqKRYsWYW5uTmJiIrGxsdy8eRMxMTFSUlLo6elh3LhxHDt2DBcXF6ZOnYq7uzvx8fHo6ury9etXYmNj6devHyUlJYwYMYI+//77r3R3dzeFhYU0NzfT1tYGwK9fv/jx4wefPn0iNTUVAwMD5OTkGDlyJO/eveP69etMmDCB6OhoKioqaG9v5+PHj8TGxlJcXExbWxsfPnxg6dKldHV1UV5eztmzZ5kyZQpLly7F29ubQYMGYW5ujp2dHd7e3sjKyvL161cEQWDChAkMHTqUxMREwsPDkZOTIzc3F09PTx4/foyTkxN2dnb8/PmT+Ph4Hjx4QHh4ODY2NsjKyuLk5IS2tjYvX74UcQNPT0+2bdvGsWPHiIiI+P/ksIeHB0ZGRvT09GBtbc2zZ8/YuHEj8+fPZ9y4cfTr14+BAwcSGBiIj48PV69eZcuWLSK7/MKFC5ibm4uu11y/fp34+HjevHmDmJgYXV1dxMXFERYWho2NDQ0NDdy6dYutW7diaGhIV1cXs2bNQlVVlYyMDBobG1m/fj1///4lLCyMffv2icCHjY0Nu3fvpry8nM2bN2NoaMiMGTPIzMzk4cOHFBYWcu7cObq7u4mJiWH58uXU1NTQ3d3N4cOHUVVVFaXcZ86cyf8FFCXVR5X4/f8AAAAASUVORK5CYII=");
+      background-repeat: repeat;
+      opacity: 0.035;
+      mix-blend-mode: soft-light;
+      pointer-events:none;
+      transform: translateZ(0);
+    }
+
+    .bg-fixed::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 720px at 50% 42%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.42) 100%);
+    }
+
+body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 18% 8%, rgba(167, 139, 250, 0.18), transparent 55%),
+        radial-gradient(1200px 800px at 88% 26%, rgba(96, 165, 250, 0.18), transparent 55%),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 18px 14px 84px; }
+
+    .topbar{
+      position: sticky;
+      top: 10px;
+      z-index: 50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--r2xl);
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--hair);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .back{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor:pointer;
+      user-select:none;
+    }
+    .back:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    .brandmark{
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(167,139,250,0.9), rgba(96,165,250,0.9));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+      flex: 0 0 auto;
+    }
+    .brandmark svg{ width: 18px; height: 18px; color: rgba(255,255,255,0.92); }
+
+    .titleblock{ min-width: 0; }
+    .title{
+      font-size: 15px;
+      letter-spacing: 0.2px;
+      margin:0;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .subtitle{
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lang{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      flex: 0 0 auto;
+    }
+    .pill{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.86);
+      cursor:pointer;
+      user-select:none;
+    }
+    .pill[aria-pressed="true"]{
+      background: rgba(167,139,250,0.20);
+      border-color: rgba(167,139,250,0.55);
+    }
+    .pill:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    .hero{
+      margin: 18px auto 0;
+      max-width: 920px;
+      padding: 24px 24px;
+      border-radius: var(--r2xl);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+    }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    .hero p{
+      margin:0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .tools{
+      margin-top: 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .search{
+      flex: 1 1 240px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .search input{
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .chiprow{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.84);
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip[aria-pressed="true"]{
+      background: rgba(96,165,250,0.18);
+      border-color: rgba(96,165,250,0.55);
+    }
+    .chip:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    .grid{
+      margin: 16px auto 0;
+      max-width: 920px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .item{
+      padding: 26px 26px;
+      border-radius: var(--r2xl);
+      min-height: 360px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+    .item:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.16); }
+    .item:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    .meta{ min-width: 0; }
+    .name{ margin:0; font-size: 22px; letter-spacing: 0.2px; }
+    .desc{ margin:10px 0 0; color: var(--muted); font-size: 16px; line-height: 1.75; }
+
+    .right{
+      display:flex;
+      flex-direction: column;
+      align-items:flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+    .tags{ display:flex; gap: 6px; flex-wrap: wrap; justify-content:flex-end; }
+    .tag{
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.80);
+      white-space: nowrap;
+    }
+    .tag.brand{ background: rgba(167,139,250,0.14); border-color: rgba(167,139,250,0.35); }
+    .tag.blue{ background: rgba(96,165,250,0.14); border-color: rgba(96,165,250,0.35); }
+
+    .action{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn{
+      font-size: 14px;
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.86);
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn.primary{
+      border-color: rgba(96,165,250,0.55);
+      background: rgba(96,165,250,0.16);
+    }
+    .btn:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    /* Sheet (WeChat guard) */
+    .sheet-backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.50);
+      opacity:0; pointer-events:none;
+      transition: opacity 180ms ease;
+      z-index: 9997;
+    }
+    .sheet-backdrop.show{ opacity:1; pointer-events:auto; }
+
+    .sheet{
+      position:fixed; left:0; right:0; bottom:-420px;
+      z-index: 9998;
+      transition: transform 220ms ease;
+      transform: translateY(0);
+      pointer-events:none;
+    }
+    .sheet.show{ transform: translateY(-420px); pointer-events:auto; }
+    .sheet-card{
+      margin: 0 12px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(14, 14, 20, 0.96);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .sheet-head{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .sheet-title{ margin:0; font-size: 14px; }
+    .sheet-desc{ margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .sheet-actions{ padding: 12px 14px 14px; display:grid; gap: 10px; }
+    .sheet-btn{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      font-size: 13px;
+      cursor:pointer;
+    }
+    .sheet-btn.primary{ border-color: rgba(96,165,250,0.55); background: rgba(96,165,250,0.18); }
+    .sheet-btn:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.92);
+      font-size: 12px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      z-index: 9999;
+    }
+    .toast.show{ opacity: 1; transform: translateX(-50%) translateY(-4px); }
+  
+    /* Keep content away from the browser UI + safe-area */
+      .wrap{
+        padding-top: calc(26px + env(safe-area-inset-top));
+        padding-bottom: calc(140px + env(safe-area-inset-bottom));
+      }
+
+      /* Ensure sticky header doesn't overlap content on iOS */
+      .topbar{
+        top: calc(10px + env(safe-area-inset-top));
+      }
+
+      /* Slightly more compact typography on narrow screens */
+      .hero{ padding: 20px 20px; }
+      .hero h1{ font-size: 22px; }
+      .hero p{ font-size: 14px; line-height: 1.7; }
+
+      .item{ padding: 22px 22px; min-height: 0; }
+      .name{ font-size: 20px; }
+      .desc{ font-size: 15px; line-height: 1.75; }
+
+@media (max-width: 520px){
+  .bg-fixed{ opacity: 0.92; }
+
+  .wrap{
+    padding-top: calc(26px + env(safe-area-inset-top));
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+}
+
+  .topbar{
+    top: calc(10px + env(safe-area-inset-top));
+  }
+
+  .hero{
+    padding: 20px 20px;
+  }
+
+  .hero h1{
+    font-size: 22px;
+  }
+
+  .hero p{
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .item{
+    padding: 22px 22px;
+    min-height: 0;
+  }
+
+  .name{
+    font-size: 20px;
+  }
+
+  .desc{
+    font-size: 15px;
+    line-height: 1.75;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="bg-fixed" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="topbar" role="navigation" aria-label="Top bar">
+      <div class="left">
+        <button class="back" id="backBtn" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="brandmark" aria-hidden="true" title="NUIST">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M18 46V18" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+            <path d="M46 46V18" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+            <path d="M18 18L46 46" stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="titleblock">
+          <p class="title" data-i18n="page_title">校内系统导航</p>
+          <p class="subtitle" data-i18n="page_sub">统一入口：查找、复制链接、在浏览器打开</p>
+        </div>
+      </div>
+
+      <div class="lang" aria-label="Language switch">
+        <button class="pill" data-lang="zh" aria-pressed="true">中</button>
+        <button class="pill" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1 data-i18n="hero_title">校内系统导航</h1>
+      <p class="hero-desc-custom">南京信息工程大学（NUIST）校内各类功能系统，均在完成统一身份认证（SSO）后集中呈现。本页不对具体系统逐一展开介绍。新生完成 SSO 登录后，即可按个人身份访问学习事务、校园生活相关服务（包括宿舍、体育场馆与图书馆等）等重要信息。需要注意的是，该功能在企业微信中的使用体验相对有限。</p>
+
+      </div>
+    </div>
+
+    <div class="grid" id="grid" aria-label="Systems list">
+      <!-- Items are injected by JS -->
+    </div>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" aria-hidden="true"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <p class="sheet-title" id="sheetTitle">打开链接</p>
+        <p class="sheet-desc" id="sheetDesc">部分链接在微信内可能受限，可复制后在浏览器打开。</p>
+      </div>
+      <div class="sheet-actions">
+        <button class="sheet-btn primary" id="sheetCopy">复制链接</button>
+        <button class="sheet-btn" id="sheetOpen">在微信内打开</button>
+        <button class="sheet-btn" id="sheetCancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function(){
+      var ENV_WECHAT = /MicroMessenger/i.test(navigator.userAgent || "");
+      var toastTimer = null;
+
+      var i18n = {
+        zh: {
+          page_title: "校内系统导航",
+          page_sub: "统一入口：查找、复制链接、在浏览器打开",
+          hero_title: "校内系统导航",
+          hero_desc: "把常用校内系统放在一个页面。部分系统需要统一身份认证；在微信内打不开时，可复制链接到浏览器打开。",
+          chip_all: "全部",
+          chip_auth: "需登录",
+          chip_life: "生活服务",
+          chip_study: "学习教务",
+          search_ph: "搜索：教务 / 校园卡 / 图书馆…",
+          open_link: "打开链接",
+          open_desc: "部分链接在微信内可能受限，可复制后在浏览器打开。",
+          copy: "复制链接",
+          open_in_wechat: "在微信内打开",
+          cancel: "取消",
+          copied: "链接已复制",
+          copy_fail: "复制失败，请长按手动复制",
+          coming: "内容准备中，稍后开放",
+          btn_open: "打开",
+          btn_copy: "复制"
+        },
+        en: {
+          page_title: "Campus Systems",
+          page_sub: "One hub: find, copy, open in browser",
+          hero_title: "Campus Systems",
+          hero_desc: "A single hub for common campus systems. Some require SSO. If WeChat blocks a link, copy it and open in your browser.",
+          chip_all: "All",
+          chip_auth: "Login required",
+          chip_life: "Campus life",
+          chip_study: "Academic",
+          search_ph: "Search: SIS / card / library…",
+          open_link: "Open link",
+          open_desc: "Some links may be restricted in WeChat. Copy and open in your browser.",
+          copy: "Copy link",
+          open_in_wechat: "Open in WeChat",
+          cancel: "Cancel",
+          copied: "Link copied",
+          copy_fail: "Copy failed. Long-press to copy",
+          coming: "Content is coming soon",
+          btn_open: "Open",
+          btn_copy: "Copy"
+        }
+      };
+
+      function getSavedLang(){
+        try { return localStorage.getItem("lang") || "zh"; } catch(e){ return "zh"; }
+      }
+      function setSavedLang(lang){
+        try { localStorage.setItem("lang", lang); } catch(e){}
+      }
+      function safeSetText(el, val){
+        if (typeof val !== "string") return;
+        el.textContent = val;
+      }
+
+      var sheet = document.getElementById("sheet");
+      var sheetBackdrop = document.getElementById("sheetBackdrop");
+      var sheetTitle = document.getElementById("sheetTitle");
+      var sheetDesc = document.getElementById("sheetDesc");
+      var sheetCopy = document.getElementById("sheetCopy");
+      var sheetOpen = document.getElementById("sheetOpen");
+      var sheetCancel = document.getElementById("sheetCancel");
+
+      var sheetHref = "";
+
+      function showToast(msg){
+        var toast = document.getElementById("toast");
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add("show");
+        if (toastTimer) window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function(){ toast.classList.remove("show"); }, 1400);
+      }
+
+      function closeSheet(){
+        sheet.classList.remove("show");
+        sheetBackdrop.classList.remove("show");
+        sheet.setAttribute("aria-hidden", "true");
+        sheetBackdrop.setAttribute("aria-hidden", "true");
+      }
+
+      function openSheet(href, dict){
+        sheetHref = href || "";
+        safeSetText(sheetTitle, dict.open_link);
+        safeSetText(sheetDesc, dict.open_desc);
+        safeSetText(sheetCopy, dict.copy);
+        safeSetText(sheetOpen, dict.open_in_wechat);
+        safeSetText(sheetCancel, dict.cancel);
+
+        sheet.classList.add("show");
+        sheetBackdrop.classList.add("show");
+        sheet.setAttribute("aria-hidden", "false");
+        sheetBackdrop.setAttribute("aria-hidden", "false");
+      }
+
+      async function copyToClipboard(text){
+        try{
+          if (navigator.clipboard && navigator.clipboard.writeText){
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        }catch(e){}
+        try{
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        }catch(e){
+          return false;
+        }
+      }
+
+      sheetBackdrop.addEventListener("click", closeSheet);
+      sheetCancel.addEventListener("click", closeSheet);
+      sheetOpen.addEventListener("click", function(){
+        if (!sheetHref) return closeSheet();
+        window.location.href = sheetHref;
+      });
+      sheetCopy.addEventListener("click", async function(){
+        if (!sheetHref) return closeSheet();
+        var dict = i18n[currentLang] || i18n.zh;
+        var ok = await copyToClipboard(sheetHref);
+        showToast(ok ? dict.copied : dict.copy_fail);
+        closeSheet();
+      });
+
+      
+      var systems = [
+        {
+          key: "sso",
+          zh: {
+            name: "统一身份认证（SSO）",
+            desc: "大多数校内系统的统一入口。首次使用建议在浏览器中打开。"
+          },
+          en: {
+            name: "Unified Identity Authentication (SSO)",
+            desc: "The single sign-on entry for most campus systems."
+          },
+          href: "https://authserver.nuist.edu.cn/",
+          tags: ["auth","study"],
+          badges: ["需登录","官方"],
+          bullets_zh: [
+            "教务系统：课表、成绩、选课等学习事务",
+            "校园卡与缴费：充值、消费记录与相关服务",
+            "图书馆系统：馆藏检索、借阅、续借与预约",
+            "后勤报修：宿舍与公共设施报修、进度查询"
+          ],
+          bullets_en: [
+            "Academic system: courses, grades and enrollment",
+            "Campus card & payments: top-up and transaction records",
+            "Library system: search, borrow, renew and reserve",
+            "Maintenance services: submit and track repair requests"
+          ],
+          highlight_zh: "校园网络通常需要单独办理学校与运营商合作的电话卡。若你还未准备，可先前往首页「校园流量卡」，查看我们为新生整理的可靠方案。",
+          highlight_en: "Campus network access usually requires a SIM card provided through the university–carrier program. If you haven't prepared one yet, visit “Campus Data Plans” on the homepage for curated options."
+        }
+      ];
+
+
+      function normalizeBadge(b, lang){
+        if (lang === "en"){
+          if (b === "需登录") return "Login";
+          if (b === "官方") return "Official";
+          return b;
+        }
+        return b;
+      }
+
+      
+      function buildItem(sys, lang, dict){
+        var data = sys[lang] || sys.zh;
+
+        var item = document.createElement("div");
+        item.className = "item";
+        item.tabIndex = 0;
+
+        var meta = document.createElement("div");
+        meta.className = "meta";
+
+        var h = document.createElement("p");
+        h.className = "name";
+        h.textContent = data.name;
+
+        var d = document.createElement("p");
+        d.className = "desc";
+        d.textContent = data.desc;
+
+        meta.appendChild(h);
+
+        // badges on top-right (but inside meta, aligned end)
+        var tags = document.createElement("div");
+        tags.className = "tags";
+        tags.style.justifyContent = "flex-start";
+        tags.style.marginTop = "10px";
+        (sys.badges || []).forEach(function(b){
+          var t = document.createElement("span");
+          var bn = normalizeBadge(b, lang);
+          t.className = "tag" + (b === "官方" ? " blue" : (b === "需登录" ? " brand" : ""));
+          t.textContent = bn;
+          tags.appendChild(t);
+        });
+
+        meta.appendChild(tags);
+        meta.appendChild(d);
+
+        // important note: first use in browser (make it obvious)
+        var noteBox = document.createElement("div");
+        noteBox.style.margin = "14px 0 0";
+        noteBox.style.padding = "14px 14px";
+        noteBox.style.borderRadius = "18px";
+        noteBox.style.border = "1px solid rgba(96,165,250,0.55)";
+        noteBox.style.background = "rgba(96,165,250,0.14)";
+        noteBox.style.display = "flex";
+        noteBox.style.gap = "10px";
+        noteBox.style.alignItems = "flex-start";
+
+        var icon = document.createElement("div");
+        icon.style.width = "30px";
+        icon.style.height = "30px";
+        icon.style.borderRadius = "12px";
+        icon.style.background = "rgba(96,165,250,0.22)";
+        icon.style.display = "flex";
+        icon.style.alignItems = "center";
+        icon.style.justifyContent = "center";
+        icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;color:rgba(255,255,255,0.92)"><path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 16h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="1.6" opacity="0.9"/></svg>';
+
+        var txt = document.createElement("div");
+        txt.style.fontSize = "14px";
+        txt.style.lineHeight = "1.65";
+        txt.style.color = "rgba(255,255,255,0.94)";
+        txt.innerHTML = (lang === "zh")
+          ? '<strong style="font-weight:650">建议：</strong>首次使用请尽量在浏览器中打开，以便完成登录与跳转。'
+          : '<strong style="font-weight:650">Tip:</strong> For your first sign-in, open in a browser to complete authentication smoothly.';
+
+        noteBox.appendChild(icon);
+        noteBox.appendChild(txt);
+        meta.appendChild(noteBox);
+
+        // divider
+        function divider(){
+          var hr = document.createElement("div");
+          hr.style.height = "1px";
+          hr.style.margin = "18px 0 16px";
+          hr.style.background = "rgba(255,255,255,0.10)";
+          meta.appendChild(hr);
+        }
+
+        divider();
+
+        // bullets: the sub-systems covered by SSO
+        var bullets = sys[lang === "zh" ? "bullets_zh" : "bullets_en"];
+        if (bullets && bullets.length) {
+          var ul = document.createElement("ul");
+          ul.style.margin = "0";
+          ul.style.paddingLeft = "18px";
+          ul.style.color = "rgba(255,255,255,0.74)";
+          ul.style.fontSize = "15px";
+          ul.style.lineHeight = "1.85";
+          bullets.forEach(function(t){
+            var li = document.createElement("li");
+            li.textContent = t;
+            ul.appendChild(li);
+          });
+          meta.appendChild(ul);
+        }
+
+        // highlight note (network) - neutral callout
+        var note = sys[lang === "zh" ? "highlight_zh" : "highlight_en"];
+        if (note) {
+          var box = document.createElement("div");
+          box.style.margin = "0";
+          box.style.padding = "14px 14px";
+          box.style.borderRadius = "18px";
+          box.style.border = "1px solid rgba(255,255,255,0.12)";
+          box.style.background = "rgba(255,255,255,0.05)";
+
+          var t = document.createElement("div");
+          t.style.fontSize = "13px";
+          t.style.fontWeight = "650";
+          t.style.letterSpacing = "0.2px";
+          t.style.color = "rgba(255,255,255,0.92)";
+          t.textContent = (lang === "zh") ? "关于校园网络" : "About campus network";
+
+          var p = document.createElement("div");
+          p.style.marginTop = "8px";
+          p.style.fontSize = "14.5px";
+          p.style.lineHeight = "1.75";
+          p.style.color = "rgba(255,255,255,0.74)";
+          p.textContent = note;
+
+          box.appendChild(t);
+          box.appendChild(p);
+          meta.appendChild(box);
+        }
+
+        
+
+        // enterprise wechat note
+        var ew = document.createElement("p");
+        ew.textContent = (lang === "zh")
+          ? "以上相关功能亦可通过学校企业微信查看与使用（不包含校园流量卡方案）。"
+          : "The above services are also available via the university’s Enterprise WeChat (excluding campus data plan options).";
+        ew.style.margin = "0";
+        ew.style.fontSize = "13.5px";
+        ew.style.lineHeight = "1.7";
+        ew.style.color = "rgba(255,255,255,0.62)";
+        meta.appendChild(ew);
+
+        // actions
+        var action = document.createElement("div");
+        action.className = "action";
+        action.style.marginTop = "18px";
+
+        var openBtn = document.createElement("button");
+        openBtn.className = "btn primary";
+        openBtn.type = "button";
+        openBtn.textContent = dict.btn_open;
+
+        var copyBtn = document.createElement("button");
+        copyBtn.className = "btn";
+        copyBtn.type = "button";
+        copyBtn.textContent = dict.btn_copy;
+
+        function onOpen(){
+          if (!sys.href || sys.href === "#"){
+            showToast(dict.coming);
+            return;
+          }
+          // If WeChat blocks, use sheet; otherwise open directly
+          if (ENV_WECHAT && /^https?:\/\//i.test(sys.href) && !sys.whitelist){
+            openSheet(sys.href, dict);
+            return;
+          }
+          window.location.href = sys.href;
+        }
+
+        openBtn.addEventListener("click", onOpen);
+        copyBtn.addEventListener("click", async function(){
+          if (!sys.href || sys.href === "#"){
+            showToast(dict.coming);
+            return;
+          }
+          var ok = await copyToClipboard(sys.href);
+          showToast(ok ? dict.copied : dict.copy_fail);
+        });
+
+        action.appendChild(openBtn);
+        action.appendChild(copyBtn);
+        meta.appendChild(action);
+
+        item.appendChild(meta);
+
+        item.addEventListener("click", function(e){
+          if (e.target && (e.target.tagName === "BUTTON")) return;
+          onOpen();
+        });
+        item.addEventListener("keydown", function(e){
+          if (e.key === "Enter") onOpen();
+        });
+
+        // For search/filter
+        item.dataset.search = (data.name + " " + data.desc + " " + (bullets || []).join(" ") + " " + (note || "")).toLowerCase();
+        item.dataset.tags = (sys.tags || []).join(",");
+
+        return item;
+      }
+
+      var currentLang = getSavedLang();
+      function applyLanguage(lang){
+        currentLang = lang;
+        var dict = i18n[lang] || i18n.zh;
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        document.title = lang === "zh" ? "校内系统导航｜NUIST 入学助手" : "Campus Systems | NUIST Assistant";
+
+        // text nodes
+        var nodes = document.querySelectorAll("[data-i18n]");
+        nodes.forEach(function(el){ safeSetText(el, dict[el.dataset.i18n]); });
+
+        // page description
+        var desc = document.querySelector(".hero-desc-custom");
+        if (desc) {
+          desc.textContent = (lang === "zh") ? "南京信息工程大学（NUIST）校内各类功能系统，均在完成统一身份认证（SSO）后集中呈现。本页不对具体系统逐一展开介绍。新生完成 SSO 登录后，即可按个人身份访问学习事务、校园生活相关服务（包括宿舍、体育场馆与图书馆等）等重要信息。需要注意的是，该功能在企业微信中的使用体验相对有限。" : "At Nanjing University of Information Science & Technology (NUIST), most campus systems are accessed after completing Unified Identity Authentication (SSO). This page does not enumerate each system individually. Once signed in via SSO, students can access key academic and campus-life services (including dormitories, sports facilities, and the library). Please note that functionality may be limited when accessed through Enterprise WeChat.";
+        }
+
+        render();
+      }
+
+      function setLangButtons(lang){
+        document.querySelectorAll(".pill").forEach(function(btn){
+          var on = btn.dataset.lang === lang;
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
+      function setFilterButtons(filter){
+        document.querySelectorAll(".chip").forEach(function(btn){
+          var on = btn.dataset.filter === filter;
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
+      var activeFilter = "all";
+
+      function render(){
+        var dict = i18n[currentLang] || i18n.zh;
+        var grid = document.getElementById("grid");
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        systems.forEach(function(sys){
+          var node = buildItem(sys, currentLang, dict);
+          grid.appendChild(node);
+        });
+
+        // apply filter + search
+        applySearchAndFilter();
+      }
+
+      function applySearchAndFilter(){
+        var qEl = document.getElementById("q");
+        var q = qEl ? ((qEl.value || "").trim().toLowerCase()) : "";
+        var nodes = document.querySelectorAll(".item");
+        nodes.forEach(function(node){
+          var tags = (node.dataset.tags || "");
+          // auth filter is special: require auth tag
+          var okFilter = (activeFilter === "all");
+          if (activeFilter === "auth") okFilter = tags.indexOf("auth") !== -1;
+          if (activeFilter === "life") okFilter = tags.indexOf("life") !== -1;
+          if (activeFilter === "study") okFilter = tags.indexOf("study") !== -1;
+
+          var okSearch = !q || (node.dataset.search || "").indexOf(q) !== -1;
+          node.style.display = (okFilter && okSearch) ? "flex" : "none";
+        });
+      }
+
+      // bindings
+      document.getElementById("backBtn").addEventListener("click", function(){
+        // Try history first; otherwise fallback
+        if (window.history.length > 1) window.history.back();
+        else window.location.href = "index.html";
+      });
+
+      document.querySelectorAll(".pill").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          var lang = btn.dataset.lang;
+          setSavedLang(lang);
+          setLangButtons(lang);
+          applyLanguage(lang);
+        });
+      });
+
+      document.querySelectorAll(".chip").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          activeFilter = btn.dataset.filter;
+          setFilterButtons(activeFilter);
+          applySearchAndFilter();
+        });
+      });
+
+      var qInput = document.getElementById("q");
+      if (qInput) qInput.addEventListener("input", applySearchAndFilter);
+// init
+      setLangButtons(currentLang);
+      applyLanguage(currentLang);
+      setFilterButtons(activeFilter);
+    })();
+  </script>
+</body>
+</html>

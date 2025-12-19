@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <meta name="description" content="NUIST 2026 入学助手：为新生整理真正用得上的入学信息与行动入口，简单、清晰、可信赖。" />
+  <meta name="theme-color" content="#050509" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NUIST 2026 入学助手" />
+  <meta property="og:description" content="为新生整理真正用得上的入学信息与行动入口，简单、清晰、可信赖。" />
+  <meta property="og:locale" content="zh_CN" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2360a5fa%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20x%3D%226%22%20y%3D%226%22%20width%3D%2252%22%20height%3D%2252%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.10%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.18%29%22/%3E%0A%3Cpath%20d%3D%22M22%2042V22h6l14%2016V22h6v20h-6L28%2026v16h-6z%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3C/svg%3E" />
+<title data-i18n="app_title">NUIST 2026 入学助手</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      
+      --brand: #60a5fa;
+      --brand2: #a78bfa;
+      --ring: rgba(96,165,250,0.35);
+--bg: #050509;
+      --text: #ffffff;
+      --sub: rgba(255, 255, 255, 0.72);
+      --muted: rgba(255, 255, 255, 0.48);
+      --radius-lg: 28px;
+      --radius-pill: 999px;
+      --ease-soft: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+    body {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    
+
+    /* Unified fixed background system (shared across pages) */
+    .bg-fixed{
+      position: fixed;
+      inset: -20vh -20vw;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(1400px 900px at 18% 0%,
+          rgba(167,139,250,0.13) 0%,
+          rgba(167,139,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        radial-gradient(1400px 900px at 88% 10%,
+          rgba(96,165,250,0.13) 0%,
+          rgba(96,165,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        linear-gradient(180deg, rgba(5,5,9,1) 0%, rgba(5,5,9,1) 100%);
+      transform: translateZ(0);
+      will-change: transform;
+      filter: saturate(1.04);
+    }
+    
+    /* Subtle dither to reduce gradient banding (especially on OLED / iOS WebView) */
+    .bg-fixed::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image: url("data:image/png;base64,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");
+      background-repeat: repeat;
+      opacity: 0.035;
+      mix-blend-mode: soft-light;
+      pointer-events:none;
+      transform: translateZ(0);
+    }
+
+    .bg-fixed::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 720px at 50% 42%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.42) 100%);
+    }
+
+.bg-glow {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(900px circle at 12% 0%, rgba(120, 180, 255, 0.32), transparent 60%),
+        radial-gradient(800px circle at 90% 10%, rgba(120, 120, 255, 0.22), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+      animation: glowDrift 22s var(--ease-soft) infinite alternate;
+    }
+
+    @keyframes glowDrift {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-40px, 24px, 0); }
+    }
+
+    @media (max-width: 640px) {
+      .bg-glow {
+        background:
+          radial-gradient(520px circle at 16% -5%, rgba(120, 180, 255, 0.16), transparent 60%),
+          radial-gradient(520px circle at 90% 0%, rgba(120, 120, 255, 0.13), transparent 55%);
+        opacity: 0.65;
+        animation-duration: 30s;
+      }
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 80px 20px 112px;
+      position: relative;
+      z-index: 0;
+    }
+
+    @media (max-width: 768px) {
+      .page { padding: 72px 16px 88px; }
+    }
+
+    .nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 10px 0 0;
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      background: linear-gradient(to bottom, rgba(5, 5, 9, 0.96), rgba(5, 5, 12, 0.85), transparent);
+      transition: background 0.35s var(--ease-soft);
+    }
+
+    .nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: var(--radius-pill);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.85),
+        0 0 0 0.5px rgba(255, 255, 255, 0.06);
+      transform-origin: center top;
+      transition:
+        transform 0.35s var(--ease-soft),
+        opacity 0.35s var(--ease-soft),
+        box-shadow 0.35s var(--ease-soft),
+        border-color 0.35s var(--ease-soft);
+    }
+
+    .nav-shell.nav-mini .nav {
+      transform: scale(0.94) translateY(-2px);
+      opacity: 0.92;
+      box-shadow:
+        0 12px 38px rgba(0, 0, 0, 0.8),
+        0 0 0 0.5px rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--sub);
+      white-space: nowrap;
+    }
+
+    .nav-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #34d399;
+      box-shadow:
+        0 0 0 4px rgba(52, 211, 153, 0.25),
+        0 0 16px rgba(52, 211, 153, 0.9);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-pill {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      border: 1px solid transparent;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease-out, color 0.2s ease-out, transform 0.12s ease-out;
+    }
+
+    .nav-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent);
+      opacity: 0;
+      transform: scale(0.4);
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    }
+
+    .nav-pill:hover { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
+    .nav-pill:hover::before { opacity: 0.7; transform: scale(1); }
+    .nav-pill:active { transform: scale(0.96); }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 15, 24, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+    }
+
+    .lang-globe {
+      width: 18px;
+      height: 18px;
+      margin-left: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .lang-globe svg { width: 14px; height: 14px; opacity: 0.85; }
+
+    .lang-btn {
+      border-radius: var(--radius-pill);
+      padding: 4px 11px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.18s ease-out, color 0.18s ease-out, transform 0.1s ease-out;
+    }
+
+    .lang-btn.active { background: #ffffff; color: #000000; }
+    .lang-btn:active { transform: scale(0.95); }
+
+    @media (max-width: 768px) {
+      .nav { padding-inline: 14px; }
+      .nav-left span {
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .hero-wrap { padding-top: 30px; position: relative; }
+
+    .hero-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -80px -120px 40%;
+      background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.08), transparent 60%);
+      opacity: 0.75;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero {
+      text-align: center;
+      margin: 0 auto 76px;
+      max-width: 720px;
+      opacity: 0;
+      transform: translateY(22px);
+      animation: heroIn 1s var(--ease-soft) forwards;
+    }
+
+    @keyframes heroIn {
+      0% { opacity: 0; transform: translateY(22px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6.2vw, 60px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--sub);
+      max-width: 640px;
+      line-height: 1.7;
+      margin: 0 auto 20px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.6;
+      margin: 0 auto 30px;
+    }
+
+    @media (max-width: 480px) {
+      .hero { margin-bottom: 60px; }
+      .hero h1 { font-size: 30px; }
+      .hero p { font-size: 15px; }
+      .hero-sub { font-size: 14px; }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 26px;
+    }
+
+    @media (max-width: 480px) { .grid { gap: 20px; } }
+
+    .card {
+      touch-action: manipulation;
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+      border-radius: var(--radius-lg);
+      padding: 26px 24px 34px;
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.72), 0 0 0 0.4px rgba(255, 255, 255, 0.12);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(36px) scale(0.99);
+      transition: transform 0.45s var(--ease-soft), box-shadow 0.45s var(--ease-soft), border-color 0.3s ease-out, background 0.4s var(--ease-soft);
+      color: inherit;
+      text-decoration: none;
+      isolation: isolate;
+    }
+
+    .card.visible { animation: cardIn 0.9s var(--ease-soft) forwards; }
+
+    @keyframes cardIn {
+      0% { opacity: 0; transform: translateY(36px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(260px circle at var(--x, 40%) var(--y, 30%), rgba(255, 255, 255, 0.22), transparent 55%);
+      opacity: 0;
+      mix-blend-mode: screen;
+      transition: opacity 0.4s var(--ease-soft);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.9), 0 0 0 0.6px rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.24);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card:active {
+      transform: translateY(-1px) scale(0.99);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 0 0.6px rgba(255, 255, 255, 0.18);
+      transition-duration: 0.12s;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--sub);
+      padding-right: 18px;
+    }
+
+    .arrow {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      opacity: 0.55;
+      font-size: 18px;
+      transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
+    }
+
+    .card:hover .arrow { transform: translateX(7px); opacity: 1; }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 22px 20px 30px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 0 0.4px rgba(255, 255, 255, 0.1);
+      }
+      .card h3 { font-size: 18px; }
+      .card p { font-size: 14px; }
+    }
+
+    .section { margin-top: 76px; padding-top: 8px; }
+
+    .section-head {
+      max-width: 900px;
+      margin: 0 auto 18px;
+      text-align: center;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    .kicker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+      opacity: 0.9;
+    }
+
+    .section-title {
+      font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      margin: 0 auto 0;
+      max-width: 720px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--sub);
+    }
+
+    .desc-line { display: block; }
+
+    .section-divider {
+      width: min(760px, 92%);
+      height: 1px;
+      margin: 18px auto 0;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+      opacity: 0.8;
+    }
+
+    .info-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .info-card {
+      touch-action: manipulation;
+      grid-column: span 6;
+      border-radius: 24px;
+      padding: 18px 18px 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
+      transition: transform 0.35s var(--ease-soft), border-color 0.25s ease-out, background 0.35s var(--ease-soft);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.085);
+    }
+
+    .info-card:active { transform: translateY(-1px) scale(0.99); transition-duration: 0.12s; }
+
+    .info-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .info-leading {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .info-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+      flex: 0 0 auto;
+    }
+
+    .info-icon svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.86;
+      color: rgba(255, 255, 255, 0.80);
+    }
+
+    .info-title {
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      font-size: 16px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .info-tag {
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.66);
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .info-desc {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.6;
+      padding-right: 14px;
+    }
+
+    .info-link {
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.9;
+    }
+
+    .info-link span {
+      opacity: 0.7;
+      transform: translateX(0);
+      transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
+    }
+
+    .info-card:hover .info-link span { transform: translateX(6px); opacity: 1; }
+
+    @media (max-width: 860px) { .info-card { grid-column: span 12; } }
+    @media (max-width: 480px) {
+      .section { margin-top: 64px; }
+      .info-grid { gap: 14px; }
+      .info-card { min-height: 128px; }
+    }
+
+    .contact {
+      margin: 96px auto 0;
+      max-width: 700px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: contactIn 1s var(--ease-soft) forwards;
+      animation-delay: 0.1s;
+    }
+
+    @keyframes contactIn {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .contact p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.72;
+      max-width: 620px;
+      margin: 0 auto 26px;
+    }
+
+    @media (max-width: 480px) {
+      .contact { margin-top: 80px; }
+      .contact p { font-size: 14px; }
+    }
+
+    .info-grid.essentials { margin-top: 24px; gap: 16px; }
+
+    .info-grid.essentials .info-card {
+      min-height: 124px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .info-grid.essentials .info-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.16);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+    }
+
+    .info-grid.essentials .info-card:active { transform: translateY(-1px) scale(0.995); }
+
+    .info-grid.essentials .info-desc {
+      font-size: 14px;
+      line-height: 1.62;
+      color: rgba(255, 255, 255, 0.66);
+      padding-right: 10px;
+    }
+
+    .info-grid.essentials .info-link { margin-top: 12px; font-size: 12px; color: rgba(255, 255, 255, 0.55); opacity: 1; }
+    .info-grid.essentials .info-tag { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.10); color: rgba(255, 255, 255, 0.62); }
+
+    @media (max-width: 640px) {
+      .info-grid.essentials { gap: 14px; }
+      .info-grid.essentials .info-card { min-height: 118px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42); }
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 42px;
+      transform: translateX(-50%) translateY(12px);
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #fff;
+      background: rgba(28, 28, 30, 0.92);
+      border-radius: 999px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* WeChat / mobile action sheet */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      z-index: 9998;
+    }
+
+    .sheet-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.24s ease, opacity 0.24s ease;
+      z-index: 9999;
+      padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
+    }
+
+    .sheet.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet-card {
+      max-width: 560px;
+      margin: 0 auto;
+      border-radius: 22px;
+      background: rgba(20, 20, 24, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.72);
+      overflow: hidden;
+    }
+
+    .sheet-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .sheet-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 6px;
+    }
+
+    .sheet-desc {
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .sheet-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .sheet-btn {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 14px;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .sheet-btn + .sheet-btn {
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .sheet-btn.secondary {
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .sheet-btn:active {
+      transform: scale(0.995);
+    }
+
+    @media (min-width: 640px) {
+      .sheet-actions { grid-template-columns: 1fr 1fr; }
+      .sheet-btn + .sheet-btn { border-top: none; border-left: 1px solid rgba(255, 255, 255, 0.10); }
+    }
+  
+    .brand-mark{
+      width: 22px;
+      height: 22px;
+      border-radius: 10px;
+      background: radial-gradient(110% 110% at 10% 10%, rgba(96,165,250,0.85), rgba(167,139,250,0.55));
+      box-shadow: 0 10px 26px rgba(0,0,0,0.38);
+      border: 1px solid rgba(255,255,255,0.16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+    .brand-mark svg{ width: 14px; height: 14px; opacity: 0.95; }
+    .nav-left{ gap: 10px; }
+    .nav-dot{ display:none; }
+    .nav-pill{ border-color: rgba(255,255,255,0.14); }
+    .nav-pill:focus{ outline: 3px solid var(--ring); outline-offset: 3px; }
+
+    /* Brand loading overlay (E-2): initial + navigation */
+    .brand-loader{
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(167, 139, 250, 0.18), transparent 55%),
+        radial-gradient(1200px 800px at 90% 30%, rgba(96, 165, 250, 0.18), transparent 55%),
+        rgba(5, 5, 9, 0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: opacity 320ms ease, transform 320ms ease;
+      opacity: 1;
+      transform: none;
+    }
+    .brand-loader.is-hidden{
+      opacity: 0;
+      transform: translateY(6px) scale(0.99);
+      pointer-events: none;
+    }
+    .brand-loader-inner{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 10px;
+      text-align:center;
+      padding: 18px 22px;
+    }
+    .brand-loader-mark{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: var(--brand);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
+    .brand-loader-mark svg{ width: 26px; height: 26px; }
+    .brand-loader-text{
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      color: rgba(255,255,255,0.92);
+      font-size: 15px;
+    }
+    .brand-loader-sub{
+      font-size: 13px;
+      color: rgba(255,255,255,0.62);
+    }
+    .brand-loader-spinner{
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.16);
+      border-top-color: rgba(255,255,255,0.62);
+      animation: spin 900ms linear infinite;
+      margin-top: 2px;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+    @media (prefers-reduced-motion: reduce){
+      .brand-loader, .brand-loader-spinner{ transition:none !important; animation:none !important; }
+    }
+
+
+@media (max-width: 520px){
+  .bg-fixed{ opacity: 0.92; }
+}
+</style>
+</head>
+
+<body>
+  <div class="bg-fixed" aria-hidden="true"></div>
+  <div class="brand-loader" id="brandLoader" role="status" aria-live="polite" aria-label="Loading">
+    <div class="brand-loader-inner">
+      <div class="brand-loader-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M18 46V18" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+          <path d="M46 46V18" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+          <path d="M18 18L46 46" stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-loader-text" id="brandLoaderTitle">NUIST 2026 入学助手</div>
+      <div class="brand-loader-sub" id="brandLoaderSub">正在进入…</div>
+      <div class="brand-loader-spinner" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" aria-hidden="true"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <div class="sheet-title" id="sheetTitle">微信内打开提示</div>
+        <div class="sheet-desc" id="sheetDesc">部分链接在微信内可能受限。你可以复制链接并在浏览器打开。</div>
+      </div>
+      <div class="sheet-actions">
+        <button class="sheet-btn" type="button" id="sheetCopy">复制链接</button>
+        <button class="sheet-btn" type="button" id="sheetOpen">继续在微信内打开</button>
+        <button class="sheet-btn secondary" type="button" id="sheetCancel">取消</button>
+      </div>
+    </div>
+  </div>
+  <div class="bg-glow"></div>
+
+  <div class="nav-shell">
+    <div class="nav">
+      <div class="nav-left">
+        <div class="nav-dot"></div>
+        <span data-i18n="nav_status">欢迎，2026级新同学</span>
+      </div>
+
+      <div class="nav-right">
+        <a href="#" class="nav-pill" data-i18n="nav_about">关于本站</a>
+
+        <div class="lang-switch" aria-label="Language">
+          <span class="lang-globe" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20" />
+              <path d="M12 2a15 15 0 0 1 0 20" />
+              <path d="M12 2a15 15 0 0 0 0 20" />
+            </svg>
+          </span>
+          <button class="lang-btn" data-lang="zh" type="button">中文</button>
+          <button class="lang-btn" data-lang="en" type="button">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="padding-bottom: calc(112px + env(safe-area-inset-bottom));">
+    <div class="hero-wrap">
+      <div class="hero">
+        <h1 data-i18n="hero_title">NUIST 2026 新生入学助手</h1>
+        <p data-i18n="hero_desc">为你准备了一切你真正会用到的入学信息，用最简洁、友好、清晰的方式呈现。</p>
+        <div class="hero-sub" data-i18n="hero_sub">我们的目标很简单：让你的大学第一天，从「放心」开始。</div>
+      </div>
+    </div>
+
+    <div class="grid" aria-label="Primary actions">
+      <a class="card" href="#" data-placeholder-link="true">
+        <h3 data-i18n="card_flow">校园流量卡</h3>
+        <p data-i18n="card_flow_p">将为你整理最适合 NUIST 的校园卡方案。</p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="card" href="#" data-placeholder-link="true">
+        <h3 data-i18n="card_dorm">寝室用品</h3>
+        <p data-i18n="card_dorm_p">未来将根据厂家合作情况，为你提供可一键下单的寝室必需品清单。</p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="card" href="https://map.nuist.edu.cn" rel="noopener noreferrer" data-external-whitelist="true">
+        <h3 data-i18n="card_map">校园地图</h3>
+        <p data-i18n="card_map_p">导航全校建筑，让你第一天不迷路。</p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="card" href="https://www.nuist.edu.cn/" rel="noopener noreferrer" data-external-whitelist="true">
+        <h3 data-i18n="card_official">校园官网入口</h3>
+        <p data-i18n="card_official_p">快速访问学校官网。</p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+<a class="card" href="wechat-add.html">
+        <h3 data-i18n="card_contact">本站负责人联系方式</h3>
+        <p data-i18n="card_contact_p">添加学长微信：获取入学帮助 &amp; 即时答疑。</p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <section class="section" aria-label="Freshman essentials">
+      <div class="section-head">
+        <div class="kicker"><span class="kicker-dot"></span><span data-i18n="m1_kicker">新生必看</span></div>
+        <div class="section-title" data-i18n="m1_title">开学前，把重要的事理清楚</div>
+        <div class="section-desc">
+          <span class="desc-line" data-i18n="m1_desc_1">报到流程、系统入口、生活准备与常见误区。</span>
+          <span class="desc-line" data-i18n="m1_desc_2">提前了解，心里会更踏实。</span>
+        </div>
+        <div class="section-divider" aria-hidden="true"></div>
+      </div>
+
+      <div class="info-grid essentials">
+        <a class="info-card" href="#" role="button" aria-label="Check-in flow" data-placeholder-link="true">
+          <div class="info-top">
+            <div class="info-leading">
+              <span class="info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11l2 2 4-4" />
+                  <path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10z" />
+                </svg>
+              </span>
+              <div class="info-title" data-i18n="m1_a_title">报到全流程</div>
+            </div>
+            <div class="info-tag" data-i18n="m1_a_tag">到校当天</div>
+          </div>
+          <div class="info-desc">
+            <span class="desc-line" data-i18n="m1_a_desc_1">从下车、领取资料到走进宿舍。</span>
+            <span class="desc-line" data-i18n="m1_a_desc_2">按真实顺序，带你提前走一遍。</span>
+          </div>
+          <div class="info-link"><span data-i18n="m1_more">查看详情</span><span aria-hidden="true">→</span></div>
+        </a>
+
+        <a class="info-card" href="xingqianzhunbei.html" aria-label="Packing checklist">
+          <div class="info-top">
+            <div class="info-leading">
+              <span class="info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 6h13" />
+                  <path d="M8 12h13" />
+                  <path d="M8 18h13" />
+                  <path d="M3 6h.01" />
+                  <path d="M3 12h.01" />
+                  <path d="M3 18h.01" />
+                </svg>
+              </span>
+              <div class="info-title" data-i18n="m1_b_title">行前准备清单</div>
+            </div>
+            <div class="info-tag" data-i18n="m1_b_tag">打包前</div>
+          </div>
+          <div class="info-desc">
+            <span class="desc-line" data-i18n="m1_b_desc_1">哪些一定要带，哪些可以到校再买。</span>
+            <span class="desc-line" data-i18n="m1_b_desc_2">少一点负担，少走一些弯路。</span>
+          </div>
+          <div class="info-link"><span data-i18n="m1_more">查看详情</span><span aria-hidden="true">→</span></div>
+        </a>
+
+        <a class="info-card" href="xiaoyuanxitongdaohang.html" aria-label="Campus systems hub">
+          <div class="info-top">
+            <div class="info-leading">
+              <span class="info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 21s-6-4.4-6-10a6 6 0 1 1 12 0c0 5.6-6 10-6 10z" />
+                  <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                </svg>
+              </span>
+              <div class="info-title" data-i18n="m1_c_title">校内系统导航</div>
+            </div>
+            <div class="info-tag" data-i18n="m1_c_tag">日常必用</div>
+          </div>
+          <div class="info-desc">
+            <span class="desc-line" data-i18n="m1_c_desc_1">教务、校园卡、网络、缴费等常用系统。</span>
+            <span class="desc-line" data-i18n="m1_c_desc_2">集中整理，避免到处寻找入口。</span>
+          </div>
+          <div class="info-link"><span data-i18n="m1_more">查看详情</span><span aria-hidden="true">→</span></div>
+        </a>
+
+        <a class="info-card" href="#" role="button" aria-label="Pitfall guide" data-placeholder-link="true">
+          <div class="info-top">
+            <div class="info-leading">
+              <span class="info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l8 4v6c0 5-3.5 9.4-8 10-4.5-.6-8-5-8-10V6l8-4z" />
+                  <path d="M12 8v5" />
+                  <path d="M12 17h.01" />
+                </svg>
+              </span>
+              <div class="info-title" data-i18n="m1_d_title">新生避坑提示</div>
+            </div>
+            <div class="info-tag" data-i18n="m1_d_tag">先看再买</div>
+          </div>
+          <div class="info-desc">
+            <span class="desc-line" data-i18n="m1_d_desc_1">常见误区与一些底线建议。</span>
+            <span class="desc-line" data-i18n="m1_d_desc_2">不是所有东西，都需要第一时间决定。</span>
+          </div>
+          <div class="info-link"><span data-i18n="m1_more">查看详情</span><span aria-hidden="true">→</span></div>
+        </a>
+      </div>
+    </section>
+
+    <div class="contact">
+      <p data-i18n="contact_desc">如果你对内容有任何建议，也欢迎通过微信联系我。本站将在未来持续完善，以帮助更多的新生。</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var toastTimer = null;
+      
+      // Brand loader helpers (E-2)
+      function setBrandLoaderCopy(lang) {
+        var titleEl = document.getElementById("brandLoaderTitle");
+        var subEl = document.getElementById("brandLoaderSub");
+        if (!titleEl || !subEl) return;
+        if (lang === "en") {
+          titleEl.textContent = "NUIST Freshman Assistant";
+          subEl.textContent = "Entering…";
+        } else {
+          titleEl.textContent = "NUIST 2026 入学助手";
+          subEl.textContent = "正在进入…";
+        }
+      }
+
+      function showBrandLoader() {
+        var loader = document.getElementById("brandLoader");
+        if (!loader) return;
+        loader.style.display = "flex";
+        loader.classList.remove("is-hidden");
+        loader.setAttribute("aria-hidden", "false");
+      }
+
+      function hideBrandLoader() {
+        var loader = document.getElementById("brandLoader");
+        if (!loader) return;
+
+        var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) {
+          loader.style.display = "none";
+          loader.setAttribute("aria-hidden", "true");
+          return;
+        }
+
+        loader.classList.add("is-hidden");
+        loader.setAttribute("aria-hidden", "true");
+        window.setTimeout(function () {
+          loader.style.display = "none";
+        }, 420);
+      }
+
+      function bindBrandLoaderNavigations() {
+        var triggers = document.querySelectorAll(
+          '.card[href="https://map.nuist.edu.cn"],' +
+          '.card[href="https://www.nuist.edu.cn/"],' +
+          '.card[href="wechat-add.html"]'
+        );
+
+        triggers.forEach(function (a) {
+          a.addEventListener("click", function (e) {
+            var href = a.getAttribute("href");
+            if (!href) return;
+
+            e.preventDefault();
+            showBrandLoader();
+
+            var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var delay = reduceMotion ? 0 : 120;
+            window.setTimeout(function () {
+              window.location.href = href;
+            }, delay);
+          });
+        });
+      }
+
+var toastHideTimer = null;
+
+      function isWeChat() {
+        try {
+          return /MicroMessenger/i.test(navigator.userAgent || "");
+        } catch (e) {
+          return false;
+        }
+      }
+
+      var ENV_WECHAT = isWeChat();
+      if (ENV_WECHAT) {
+        document.documentElement.dataset.env = "wechat";
+      }
+
+      function showToast(message) {
+        var toast = document.querySelector(".toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.className = "toast";
+          document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+
+        // ensure show animation retriggers
+        requestAnimationFrame(function () {
+          toast.classList.add("show");
+        });
+
+        clearTimeout(toastTimer);
+        clearTimeout(toastHideTimer);
+
+        toastTimer = setTimeout(function () {
+          toast.classList.remove("show");
+          toastHideTimer = setTimeout(function () {
+            if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 280);
+        }, 1600);
+      }
+
+      function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+
+        return new Promise(function (resolve, reject) {
+          try {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            ta.style.top = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            ta.setSelectionRange(0, ta.value.length);
+            var ok = document.execCommand("copy");
+            document.body.removeChild(ta);
+            ok ? resolve() : reject(new Error("copy_failed"));
+          } catch (e) {
+            reject(e);
+          }
+        });
+      }
+
+      // WeChat link guard (action sheet)
+      var sheet = document.getElementById("sheet");
+      var sheetBackdrop = document.getElementById("sheetBackdrop");
+      var sheetTitle = document.getElementById("sheetTitle");
+      var sheetDesc = document.getElementById("sheetDesc");
+      var sheetCopy = document.getElementById("sheetCopy");
+      var sheetOpen = document.getElementById("sheetOpen");
+      var sheetCancel = document.getElementById("sheetCancel");
+      var sheetHref = null;
+
+      function openSheet(href, dict) {
+        sheetHref = href;
+
+        if (dict) {
+          if (sheetTitle) sheetTitle.textContent = dict.wechat_tip_title || "微信内打开提示";
+          if (sheetDesc) sheetDesc.textContent = dict.wechat_tip_desc || "部分链接在微信内可能受限。你可以复制链接并在浏览器打开。";
+          if (sheetCopy) sheetCopy.textContent = dict.wechat_copy || "复制链接";
+          if (sheetOpen) sheetOpen.textContent = dict.wechat_open || "继续在微信内打开";
+          if (sheetCancel) sheetCancel.textContent = dict.wechat_cancel || "取消";
+        }
+
+        if (sheetBackdrop) {
+          sheetBackdrop.classList.add("show");
+          sheetBackdrop.setAttribute("aria-hidden", "false");
+        }
+        if (sheet) {
+          sheet.classList.add("show");
+          sheet.setAttribute("aria-hidden", "false");
+        }
+      }
+
+      function closeSheet() {
+        sheetHref = null;
+        if (sheetBackdrop) {
+          sheetBackdrop.classList.remove("show");
+          sheetBackdrop.setAttribute("aria-hidden", "true");
+        }
+        if (sheet) {
+          sheet.classList.remove("show");
+          sheet.setAttribute("aria-hidden", "true");
+        }
+      }
+
+      if (sheetBackdrop) sheetBackdrop.addEventListener("click", closeSheet);
+      if (sheetCancel) sheetCancel.addEventListener("click", closeSheet);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeSheet();
+      });
+
+      if (sheetCopy) {
+        sheetCopy.addEventListener("click", function () {
+          if (!sheetHref) return closeSheet();
+          copyToClipboard(sheetHref)
+            .then(function () {
+              closeSheet();
+              var lang = getSavedLang();
+              var dict = i18n[lang] || i18n.zh;
+              showToast(dict.toast_copied || "已复制链接");
+            })
+            .catch(function () {
+              closeSheet();
+              var lang = getSavedLang();
+              var dict = i18n[lang] || i18n.zh;
+              showToast(dict.toast_copy_fail || "复制失败，请长按链接手动复制");
+            });
+        });
+      }
+
+      if (sheetOpen) {
+        sheetOpen.addEventListener("click", function () {
+          if (!sheetHref) return closeSheet();
+          var href = sheetHref;
+          closeSheet();
+          window.location.href = href;
+        });
+      }
+
+      // Placeholder cards
+      document.querySelectorAll('[data-placeholder-link="true"]').forEach(function (el) {
+        el.addEventListener("click", function (e) {
+          e.preventDefault();
+          showToast("内容准备中，稍后开放");
+        });
+      });
+
+      // ---- External whitelist (WeChat) ----
+      // Rule: In WeChat, external links are guarded by default; links marked with
+      // data-external-whitelist="true" are allowed to open directly.
+      function isWhitelistedLink(a) {
+        return !!(a && a.dataset && a.dataset.externalWhitelist === "true");
+      }
+
+      function isHttpLink(a) {
+        if (!a) return false;
+        var href = a.getAttribute("href") || "";
+        return href.indexOf("http://") === 0 || href.indexOf("https://") === 0;
+      }
+
+      function bindWeChatExternalGuards(dict) {
+        if (!ENV_WECHAT) return;
+
+        // Bind only once per element
+        var links = document.querySelectorAll('a[href^="http://"],a[href^="https://"]');
+        links.forEach(function (a) {
+          if (a.dataset && a.dataset.placeholderLink === "true") return;
+          if (!isHttpLink(a)) return;
+
+          // Allow direct open when whitelisted
+          if (isWhitelistedLink(a)) return;
+
+          if (a.dataset && a.dataset.wechatGuardBound === "true") return;
+          a.dataset.wechatGuardBound = "true";
+
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            openSheet(a.href, dict);
+          });
+        });
+      }
+
+      // ---- i18n ----
+      function safeSetText(el, value) {
+        el.textContent = value == null ? "" : String(value);
+      }
+
+      function getSavedLang() {
+        try {
+          return localStorage.getItem("lang") || "zh";
+        } catch (e) {
+          return "zh";
+        }
+      }
+
+      function setSavedLang(lang) {
+        try {
+          localStorage.setItem("lang", lang);
+        } catch (e) {}
+      }
+
+      function setActiveLang(lang) {
+        langBtns.forEach(function (b) {
+          b.classList.remove("active");
+        });
+        var active = document.querySelector('.lang-btn[data-lang="' + lang + '"]');
+        if (active) active.classList.add("active");
+      }
+
+      function applyLanguage(lang) {
+        var dict = i18n[lang] || i18n.zh;
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        var nodes = document.querySelectorAll("[data-i18n]");
+        nodes.forEach(function (el) {
+          safeSetText(el, dict[el.dataset.i18n]);
+        });
+        document.title = dict.app_title || document.title;
+
+        
+
+        // keep brand loader copy in sync
+        setBrandLoaderCopy(lang);
+// If sheet is currently open, refresh its copy in the new language
+        if (sheet && sheet.classList.contains("show") && sheetHref) {
+          openSheet(sheetHref, dict);
+        }
+
+        // (Re)bind WeChat guard with current language copy
+        bindWeChatExternalGuards(dict);
+      }
+
+      var navShell = document.querySelector(".nav-shell");
+      var lastScroll = 0;
+
+      window.addEventListener("scroll", function () {
+        if (!navShell) return;
+        var cur = window.scrollY || 0;
+        if (cur > lastScroll && cur > 32) {
+          navShell.classList.add("nav-mini");
+        } else if (cur < 24) {
+          navShell.classList.remove("nav-mini");
+        }
+        lastScroll = cur;
+      });
+
+      var cards = document.querySelectorAll(".card");
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) e.target.classList.add("visible");
+            });
+          },
+          { threshold: 0.2 }
+        );
+        cards.forEach(function (c) {
+          observer.observe(c);
+        });
+      } else {
+        cards.forEach(function (c) {
+          c.classList.add("visible");
+        });
+      }
+
+      var isCoarsePointer = false;
+      try {
+        isCoarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+      } catch (e) {
+        isCoarsePointer = false;
+      }
+
+      if (!isCoarsePointer) {
+        cards.forEach(function (card) {
+          card.addEventListener("pointermove", function (e) {
+            var rect = card.getBoundingClientRect();
+            var x = ((e.clientX - rect.left) / rect.width) * 100;
+            var y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty("--x", x + "%");
+            card.style.setProperty("--y", y + "%");
+          });
+        });
+      }
+
+      var langBtns = document.querySelectorAll(".lang-btn");
+
+      var i18n = {
+        zh: {
+          app_title: "NUIST 2026 入学助手",
+          nav_status: "欢迎，2026级新同学",
+          nav_about: "关于本站",
+
+          hero_title: "NUIST 2026 新生入学助手",
+          hero_desc: "为你准备了一切你真正会用到的入学信息，用最简洁、友好、清晰的方式呈现。",
+          hero_sub: "我们的目标很简单：让你的大学第一天，从「放心」开始。",
+
+          card_flow: "校园流量卡",
+          card_flow_p: "将为你整理最适合 NUIST 的校园卡方案。",
+
+          card_dorm: "寝室用品",
+          card_dorm_p: "未来将根据厂家合作情况，为你提供可一键下单的寝室必需品清单。",
+
+          card_map: "校园地图",
+          card_map_p: "导航全校建筑，让你第一天不迷路。",
+
+          card_official: "校园官网入口",
+          card_official_p: "快速访问学校官网。",
+card_contact: "本站负责人联系方式",
+          card_contact_p: "添加学长微信：获取入学帮助 & 即时答疑。",
+
+          m1_kicker: "新生必看",
+          m1_title: "开学前，把重要的事理清楚",
+          m1_desc_1: "报到流程、系统入口、生活准备与常见误区。",
+          m1_desc_2: "提前了解，心里会更踏实。",
+          m1_more: "查看详情",
+
+          m1_a_title: "报到全流程",
+          m1_a_tag: "到校当天",
+          m1_a_desc_1: "从下车、领取资料到走进宿舍。",
+          m1_a_desc_2: "按真实顺序，带你提前走一遍。",
+
+          m1_b_title: "行前准备清单",
+          m1_b_tag: "打包前",
+          m1_b_desc_1: "哪些一定要带，哪些可以到校再买。",
+          m1_b_desc_2: "少一点负担，少走一些弯路。",
+
+          m1_c_title: "校内系统导航",
+          m1_c_tag: "日常必用",
+          m1_c_desc_1: "教务、校园卡、网络、缴费等常用系统。",
+          m1_c_desc_2: "集中整理，避免到处寻找入口。",
+
+          m1_d_title: "新生避坑提示",
+          m1_d_tag: "先看再买",
+          m1_d_desc_1: "常见误区与一些底线建议。",
+          m1_d_desc_2: "不是所有东西，都需要第一时间决定。",
+
+          contact_desc: "如果你对内容有任何建议，也欢迎通过微信联系我。本站将在未来持续完善，以帮助更多的新生。",
+
+          wechat_tip_title: "微信内打开提示",
+          wechat_tip_desc: "部分链接在微信内可能受限。你可以复制链接并在浏览器打开。",
+          wechat_copy: "复制链接",
+          wechat_open: "继续在微信内打开",
+          wechat_cancel: "取消",
+          toast_copied: "已复制链接",
+          toast_copy_fail: "复制失败，请长按链接手动复制"
+        }
+        ,
+        en: {
+          app_title: "NUIST 2026 Onboarding Assistant",
+          nav_status: "Welcome, Class of 2026",
+          nav_about: "About",
+
+          hero_title: "NUIST 2026 Onboarding Assistant",
+          hero_desc: "Everything you truly need for your first days in university, presented clearly, simply, humanly.",
+          hero_sub: "Our goal is simple: your Day 1 starts with peace of mind.",
+
+          card_flow: "Campus SIM Card",
+          card_flow_p: "We will compare and provide the best campus SIM plans.",
+
+          card_dorm: "Dorm Essentials",
+          card_dorm_p: "When supplier partnerships are ready, you will be able to buy essentials in one click.",
+
+          card_map: "Campus Map",
+          card_map_p: "Navigate the campus effortlessly from Day 1.",
+
+          card_official: "Official Website",
+          card_official_p: "Quick access to the university website.",
+card_contact: "Contact the Author",
+          card_contact_p: "Add my WeChat for help and instant Q&A.",
+
+          m1_kicker: "Essentials",
+          m1_title: "Before you arrive, get the key things right",
+          m1_desc_1: "Check-in, campus systems, what to pack, and common pitfalls.",
+          m1_desc_2: "A quick read now saves you stress later.",
+          m1_more: "Learn more",
+
+          m1_a_title: "Check-in Flow",
+          m1_a_tag: "Arrival day",
+          m1_a_desc_1: "From arrival to stepping into your dorm.",
+          m1_a_desc_2: "In the real order you will go through.",
+
+          m1_b_title: "Packing List",
+          m1_b_tag: "Before you pack",
+          m1_b_desc_1: "What you should bring, and what can wait until you arrive.",
+          m1_b_desc_2: "Less to carry. Fewer detours.",
+
+          m1_c_title: "Campus Systems",
+          m1_c_tag: "Daily use",
+          m1_c_desc_1: "Academic, campus card, network and payment systems.",
+          m1_c_desc_2: "Collected here, so you do not have to hunt for links.",
+
+          m1_d_title: "Pitfall Guide",
+          m1_d_tag: "Read first",
+          m1_d_desc_1: "Common traps and a few baseline tips.",
+          m1_d_desc_2: "Not everything needs a decision on day one.",
+
+          contact_desc: "If you have suggestions, feel free to reach out. This site will keep improving for future freshmen.",
+
+          wechat_tip_title: "Open link",
+          wechat_tip_desc: "Some links may be restricted in WeChat. You can copy the link and open it in your browser.",
+          wechat_copy: "Copy link",
+          wechat_open: "Open in WeChat",
+          wechat_cancel: "Cancel",
+          toast_copied: "Link copied",
+          toast_copy_fail: "Copy failed. Please long-press to copy"
+        }
+      };
+
+      langBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var lang = btn.dataset.lang;
+          setSavedLang(lang);
+          setActiveLang(lang);
+          applyLanguage(lang);
+        });
+      });
+
+      var saved = getSavedLang();
+      setActiveLang(saved);
+      applyLanguage(saved);
+    
+      bindBrandLoaderNavigations();
+      setBrandLoaderCopy(saved);
+
+      // initial hide after i18n is applied and first paint
+      try {
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(hideBrandLoader);
+        });
+        window.addEventListener("load", hideBrandLoader, { once: true });
+      } catch (e) {
+        hideBrandLoader();
+      }
+
+
+      // BFCache safety net for loader: ensure it never blocks UI on back/forward restore
+      window.addEventListener("pageshow", function (e) {
+        var loader = document.getElementById("brandLoader");
+        if (!loader) return;
+        // On BFCache restore (e.persisted === true) or normal show, always reset loader to hidden
+        loader.classList.add("is-hidden");
+        loader.style.display = "none";
+        loader.setAttribute("aria-hidden", "true");
+      });
+
+      window.addEventListener("pagehide", function () {
+        var loader = document.getElementById("brandLoader");
+        if (!loader) return;
+        // Before leaving (including BFCache freeze), reset loader so back won't show a stuck overlay
+        loader.classList.add("is-hidden");
+        loader.style.display = "none";
+        loader.setAttribute("aria-hidden", "true");
+      });
+
+})();
+  </script>
+</body>
+</html>
