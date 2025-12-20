@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <meta name="description" content="NUIST 2026 入学助手：为新生整理真正用得上的入学信息与行动入口，简单、清晰、可信赖。" />
+  <meta name="theme-color" content="#050509" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NUIST 2026 入学助手" />
+  <meta property="og:description" content="为新生整理真正用得上的入学信息与行动入口，简单、清晰、可信赖。" />
+  <meta property="og:locale" content="zh_CN" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2360a5fa%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a78bfa%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20x%3D%226%22%20y%3D%226%22%20width%3D%2252%22%20height%3D%2252%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.10%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.18%29%22/%3E%0A%3Cpath%20d%3D%22M22%2042V22h6l14%2016V22h6v20h-6L28%2026v16h-6z%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3C/svg%3E" />
+<title data-i18n="page_title">添加微信 · NUIST 2026 入学助手</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      
+      --brand: #60a5fa;
+      --brand2: #a78bfa;
+      --ring: rgba(96,165,250,0.35);
+--bg: #050509;
+      --card: rgba(255, 255, 255, 0.06);
+      --text: #ffffff;
+      --sub: rgba(255, 255, 255, 0.68);
+      --pill: rgba(255, 255, 255, 0.12);
+      --accent: #ffffff;
+      --radius: 26px;
+      --blur: blur(24px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    
+
+    /* Unified fixed background system (shared across pages) */
+    .bg-fixed{
+      position: fixed;
+      inset: -20vh -20vw;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(1400px 900px at 18% 0%,
+          rgba(167,139,250,0.13) 0%,
+          rgba(167,139,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        radial-gradient(1400px 900px at 88% 10%,
+          rgba(96,165,250,0.13) 0%,
+          rgba(96,165,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        linear-gradient(180deg, rgba(5,5,9,1) 0%, rgba(5,5,9,1) 100%);
+      transform: translateZ(0);
+      will-change: transform;
+      filter: saturate(1.04);
+    }
+    .bg-fixed::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 720px at 50% 42%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.42) 100%);
+    }
+
+.shell {
+      max-width: 520px;
+      width: 100%;
+      border-radius: 32px;
+      padding: 28px 24px 26px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .title-block h1 {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .title-block p {
+      font-size: 13px;
+      color: var(--sub);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--sub);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* 语言切换（与首页风格保持一致） */
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .lang-globe {
+      font-size: 12px;
+      padding: 4px 6px;
+      color: var(--sub);
+      user-select: none;
+    }
+
+    .lang-btn {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      color: var(--sub);
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease;
+    }
+
+    .lang-btn.active {
+      background: #ffffff;
+      color: #000;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--sub);
+      margin-bottom: 20px;
+    }
+
+    .hint strong {
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .options {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .option-card {
+      border-radius: 24px;
+      padding: 16px 16px 18px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .option-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .option-title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      color: var(--sub);
+      white-space: nowrap;
+    }
+
+    .option-text {
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 12px;
+    }
+
+    .option-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.9);
+      color: #000;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+
+    .option-btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: var(--sub);
+    }
+
+    .option-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+
+    .option-btn.secondary:hover {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+    }
+
+    .pc-panel {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.35);
+      border: 1px dashed rgba(255,255,255,0.2);
+      font-size: 13px;
+      color: var(--sub);
+      display: none;
+    }
+
+    .wechat-id-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.1);
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .wechat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .foot-tip {
+      font-size: 11px;
+      color: var(--sub);
+      margin-top: 8px;
+      text-align: right;
+    }
+
+    @media (max-width: 480px) {
+      .shell {
+        padding-inline: 18px;
+        border-radius: 24px;
+      }
+
+      .top-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .top-actions {
+        align-self: flex-end;
+      }
+    }
+  
+    .brand-mark{
+      width: 22px;
+      height: 22px;
+      border-radius: 10px;
+      background: radial-gradient(110% 110% at 10% 10%, rgba(96,165,250,0.85), rgba(167,139,250,0.55));
+      box-shadow: 0 10px 26px rgba(0,0,0,0.38);
+      border: 1px solid rgba(255,255,255,0.16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+    .brand-mark svg{ width: 14px; height: 14px; opacity: 0.95; }
+    .title-block{ display:flex; flex-direction:column; gap:10px; }
+    .title-line{ display:flex; align-items:center; gap:10px; }
+    .option-btn:focus, .back-link:focus, .lang-btn:focus{
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+
+@media (max-width: 520px){
+  .bg-fixed{ opacity: 0.92; }
+}
+</style>
+</head>
+
+<body>
+  <div class="bg-fixed" aria-hidden="true"></div>
+  <div class="shell">
+    <div class="top-row">
+      <div class="title-block">
+        <h1 data-i18n="add_title">添加微信</h1>
+        <p data-i18n="add_subtitle">选择你现在使用的设备，我们帮你尽量减轻操作步骤。</p>
+      </div>
+      <div class="top-actions">
+        <div class="lang-switch">
+          <span class="lang-globe">🌐</span>
+          <button class="lang-btn active" data-lang="zh">中文</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <a href="index.html" class="back-link" data-i18n="back_home">← 返回首页</a>
+      </div>
+    </div>
+
+    <p class="hint">
+      <span data-i18n="hint_label">微信号统一为：</span>
+      <strong>bomarte88</strong>
+    </p>
+
+    <div class="options">
+      <!-- 手机端 -->
+      <div class="option-card">
+        <div class="option-head">
+          <div class="option-title" data-i18n="mobile_title">我现在在手机上</div>
+          <span class="chip" data-i18n="mobile_chip">推荐</span>
+        </div>
+        <p class="option-text" data-i18n="mobile_text">
+          我们会尝试帮你复制微信号，并唤起微信 App。若未能自动跳转，你只需要切到微信，粘贴并搜索即可。
+        </p>
+        <button class="option-btn" id="btn-mobile" data-i18n="mobile_btn">
+          复制微信号并尝试打开微信
+        </button>
+      </div>
+
+      <!-- 电脑端 -->
+      <div class="option-card">
+        <div class="option-head">
+          <div class="option-title" data-i18n="pc_title">我现在在电脑上</div>
+        </div>
+        <p class="option-text" data-i18n="pc_text">
+          会在下方显示微信号，方便你拿起手机，在“添加朋友”中手动输入或复制。
+        </p>
+        <button class="option-btn secondary" id="btn-pc" data-i18n="pc_btn">
+          显示微信号
+        </button>
+
+        <div class="pc-panel" id="pc-panel">
+          <div data-i18n="pc_panel_label">微信号：</div>
+          <div class="wechat-id-pill">
+            <span class="wechat-dot"></span>
+            <span id="wechat-id-text">bomarte88</span>
+          </div>
+          <div style="margin-top:8px;" data-i18n="pc_panel_help">
+            建议在手机微信中：<br>
+            「添加朋友」→「微信号/手机号」→ 输入或粘贴以上微信号。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-tip" data-i18n="foot_tip">
+      如有任何问题，你也可以回到首页，通过其他方式联系到我。
+    </div>
+  </div>
+
+  <script>
+    const WECHAT_ID = "bomarte88";
+
+    // ===== 语言包（wechat-add 页面） =====
+    const i18n = {
+      zh: {
+        page_title: "添加微信 · NUIST 2026 入学助手",
+        add_title: "添加微信",
+        add_subtitle: "选择你现在使用的设备，我们帮你尽量减轻操作步骤。",
+        back_home: "← 返回首页",
+        hint_label: "微信号统一为：",
+
+        mobile_title: "我现在在手机上",
+        mobile_chip: "推荐",
+        mobile_text: "我们会尝试帮你复制微信号，并唤起微信 App。若未能自动跳转，你只需要切到微信，粘贴并搜索即可。",
+        mobile_btn: "复制微信号并尝试打开微信",
+
+        pc_title: "我现在在电脑上",
+        pc_text: "会在下方显示微信号，方便你拿起手机，在“添加朋友”中手动输入或复制。",
+        pc_btn: "显示微信号",
+        pc_panel_label: "微信号：",
+        pc_panel_help: "建议在手机微信中：\n「添加朋友」→「微信号/手机号」→ 输入或粘贴以上微信号。",
+
+        foot_tip: "如有任何问题，你也可以回到首页，通过其他方式联系到我。",
+
+        alert_copied: "已复制微信号：",
+        alert_copied_tail: "若未能自动打开微信，请手动切换到微信，在添加朋友处粘贴。",
+        alert_copy_failed: "请手动记下微信号：",
+        alert_copy_failed_tail: "当前浏览器不支持自动复制。"
+      },
+      en: {
+        page_title: "Add WeChat · NUIST 2026 Onboarding Assistant",
+        add_title: "Add WeChat",
+        add_subtitle: "Choose the device you are using now and we will simplify the steps for you.",
+        back_home: "← Back to Home",
+        hint_label: "WeChat ID:",
+
+        mobile_title: "I'm on my phone",
+        mobile_chip: "Recommended",
+        mobile_text: "We will try to copy the WeChat ID and open the WeChat app. If it does not open automatically, just switch to WeChat and paste it in Add Contacts.",
+        mobile_btn: "Copy ID and try to open WeChat",
+
+        pc_title: "I'm on a computer",
+        pc_text: "The WeChat ID will be shown below so you can add it on your phone via “Add Contacts”.",
+        pc_btn: "Show WeChat ID",
+        pc_panel_label: "WeChat ID:",
+        pc_panel_help: "On your phone: \n“Add Contacts” → “WeChat ID / Mobile” → type or paste the ID above.",
+
+        foot_tip: "If anything feels unclear, you can always go back to the homepage and reach me in other ways.",
+
+        alert_copied: "WeChat ID copied: ",
+        alert_copied_tail: "If WeChat doesn’t open automatically, please switch to WeChat and paste it in Add Contacts.",
+        alert_copy_failed: "Please note this WeChat ID: ",
+        alert_copy_failed_tail: "Your current browser does not support auto copy."
+      }
+    };
+
+    let currentLang = "zh";
+
+    function applyLanguage(lang) {
+      const dict = i18n[lang] || i18n.zh;
+      currentLang = lang;
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key]) {
+          // support \n -> <br> for some texts
+          if (dict[key].includes("\n")) {
+            el.innerHTML = dict[key].replace(/\n/g, "<br>");
+          } else {
+            el.textContent = dict[key];
+          }
+        }
+      });
+
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      try {
+        localStorage.setItem("lang", lang);
+      } catch (e) {}
+    }
+
+    // 从 localStorage 读取全站语言设置
+    const savedLang = (function() {
+      try {
+        return localStorage.getItem("lang") || "zh";
+      } catch (e) {
+        return "zh";
+      }
+    })();
+
+    applyLanguage(savedLang);
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        applyLanguage(lang);
+      });
+    });
+
+    const btnMobile = document.getElementById("btn-mobile");
+    const btnPc = document.getElementById("btn-pc");
+    const pcPanel = document.getElementById("pc-panel");
+
+    // 手机端：复制 + 尝试拉起微信
+    btnMobile.addEventListener("click", async () => {
+      const dict = i18n[currentLang] || i18n.zh;
+      let copied = false;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(WECHAT_ID);
+          copied = true;
+        } catch (e) {
+          copied = false;
+        }
+      }
+
+      if (copied) {
+        alert(
+          (dict.alert_copied || "") +
+          " " + WECHAT_ID + "\n" +
+          (dict.alert_copied_tail || "")
+        );
+      } else {
+        alert(
+          (dict.alert_copy_failed || "") +
+          " " + WECHAT_ID + "\n" +
+          (dict.alert_copy_failed_tail || "")
+        );
+      }
+
+      try {
+        window.location.href = "weixin://";
+      } catch (e) {
+        // ignore
+      }
+    });
+
+    // 电脑端：展开微信号面板
+    btnPc.addEventListener("click", () => {
+      pcPanel.style.display = "block";
+    });
+  </script>
+</body>
+</html>

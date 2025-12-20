@@ -1,0 +1,343 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>新生避坑提示｜NUIST 入学助手</title>
+<style>
+    :root {
+      --bg: #050509;
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --muted2: rgba(255,255,255,0.58);
+      --line: rgba(255,255,255,0.10);
+      --card: rgba(255,255,255,0.045);
+      --card2: rgba(255,255,255,0.040);
+      --shadow: 0 20px 60px rgba(0,0,0,0.55);
+      --r2xl: 24px;
+      --rxl: 18px;
+      --brand: #60a5fa;
+      --brand2: #a78bfa;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    /* Unified fixed background system (shared across pages) */
+    .bg-fixed{
+      position: fixed;
+      inset: -20vh -20vw;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(1400px 900px at 18% 0%,
+          rgba(167,139,250,0.13) 0%,
+          rgba(167,139,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        radial-gradient(1400px 900px at 88% 10%,
+          rgba(96,165,250,0.13) 0%,
+          rgba(96,165,250,0.07) 42%,
+          rgba(5,5,9,0.00) 76%),
+        linear-gradient(180deg, rgba(5,5,9,1) 0%, rgba(5,5,9,1) 100%);
+      transform: translateZ(0);
+      will-change: transform;
+      filter: saturate(1.04);
+    }
+    .bg-fixed::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 720px at 50% 42%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.42) 100%);
+    }
+body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 760px at 20% 8%, rgba(167,139,250,0.16), transparent 60%),
+        radial-gradient(1100px 760px at 86% 20%, rgba(96,165,250,0.16), transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 14px 84px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin: 10px auto 0;
+      max-width: 980px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(10,12,16,0.52);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .back:active { transform: translateY(1px); }
+
+    .brandDot {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(96,165,250,0.85), rgba(167,139,250,0.85));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: rgba(5,5,9,0.9);
+      flex: 0 0 auto;
+    }
+
+    .titleBlock { flex: 1 1 auto; min-width: 0; }
+    .titleBlock .t {
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .titleBlock .s {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lang {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .pill {
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .pill.on {
+      border-color: rgba(96,165,250,0.55);
+      background: rgba(96,165,250,0.16);
+    }
+
+    .hero {
+      margin: 18px auto 0;
+      max-width: 920px;
+      padding: 24px 24px;
+      border-radius: var(--r2xl);
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .grid {
+      margin: 16px auto 0;
+      max-width: 920px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .section {
+      border-radius: var(--r2xl);
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+    }
+    .sectionHead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      gap: 10px;
+    }
+    .sectionHead h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+    }
+    .sectionHead .hint {
+      color: var(--muted2);
+      font-size: 12.5px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 14px 14px 16px;
+    }
+
+    .card {
+      padding: 16px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+    }
+    .card .k {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card .k .name {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+    }
+    .badge {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.04);
+      white-space: nowrap;
+    }
+    .card .d {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,0.72);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .footerSpace {
+      height: 20px;
+    }
+
+    @media (max-width: 520px){
+      .bg-fixed{ opacity: 0.92; }
+
+      body{
+        background:
+          radial-gradient(1400px 900px at 20% -6%, rgba(167,139,250,0.10) 0%, rgba(167,139,250,0.06) 42%, rgba(167,139,250,0.00) 74%),
+          radial-gradient(1400px 900px at 92% 2%, rgba(96,165,250,0.10) 0%, rgba(96,165,250,0.06) 42%, rgba(96,165,250,0.00) 74%),
+          var(--bg);
+}
+      .wrap{
+        padding-top: calc(26px + env(safe-area-inset-top));
+        padding-bottom: calc(140px + env(safe-area-inset-bottom));
+      }
+      .topbar{
+        top: calc(10px + env(safe-area-inset-top));
+      }
+      .hero{ padding: 20px 20px; }
+      .hero h1{ font-size: 22px; }
+      .hero p{ font-size: 14px; }
+      .sectionHead{ padding: 16px 16px 12px; }
+      .cards{ padding: 12px 12px 14px; }
+    }
+  </style></head>
+<body><div class="bg-fixed" aria-hidden="true"></div>
+<div class="topbar">
+    <button class="back" type="button" aria-label="Back" id="btnBack">
+      <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <div class="brandDot" aria-hidden="true">N</div>
+
+    <div class="titleBlock">
+      <p class="t" data-i18n="top_title">新生避坑提示</p>
+      <p class="s" data-i18n="top_sub">提前知道，少走弯路</p>
+    </div>
+
+    <div class="lang" aria-label="Language switch">
+      <div class="pill on" role="button" tabindex="0" id="langZh">中</div>
+      <div class="pill" role="button" tabindex="0" id="langEn">EN</div>
+    </div>
+  </div></div>
+<div class="wrap"><section class="hero"><h1>有些事，提前知道会轻松很多</h1><p>这些并不是“坑你”，而是前人踩过、希望你能绕开的地方。</p></section>
+<div class="grid">
+<section class="section">
+  <div class="sectionHead"><h2>学习相关</h2><div class="hint">选课 · 教务 · 成绩</div></div>
+  <div class="cards"><div class='card'><p class='name'>选课理解误区</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>课程难度判断</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>成绩与绩点</p><p class='desc'>（内容待补充）</p></div></div>
+</section>
+<section class="section">
+  <div class="sectionHead"><h2>生活相关</h2><div class="hint">宿舍 · 消费 · 作息</div></div>
+  <div class="cards"><div class='card'><p class='name'>宿舍真实情况</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>不必要的消费</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>时间与精力分配</p><p class='desc'>（内容待补充）</p></div></div>
+</section>
+<section class="section">
+  <div class="sectionHead"><h2>信息判断</h2><div class="hint">通知 · 群聊 · 传言</div></div>
+  <div class="cards"><div class='card'><p class='name'>真假通知</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>学长学姐建议</p><p class='desc'>（内容待补充）</p></div><div class='card'><p class='name'>二手信息风险</p><p class='desc'>（内容待补充）</p></div></div>
+</section></div></div>
+<script>
+(function(){
+  const back = document.getElementById("btnBack");
+  if(back){
+    back.addEventListener("click", function(){
+      if(history.length > 1) history.back();
+      else window.location.href = "index.html";
+    });
+  }
+  const zh = document.getElementById("langZh");
+  const en = document.getElementById("langEn");
+  function setPill(isEn){
+    if(zh && en){
+      zh.classList.toggle("on", !isEn);
+      en.classList.toggle("on", isEn);
+    }
+    try{ localStorage.setItem("nuist_lang", isEn ? "en":"zh"); }catch(e){}
+  }
+  if(zh) zh.addEventListener("click", ()=>setPill(false));
+  if(en) en.addEventListener("click", ()=>setPill(true));
+  let lang="zh";
+  try{ lang=localStorage.getItem("nuist_lang")||"zh"; }catch(e){}
+  setPill(lang==="en");
+})();
+</script>
+
+</body></html>
